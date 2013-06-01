@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,11 +12,80 @@ namespace ROTP.Scenes.Common
         private SpriteFont _font;
         private Texture2D _blankTexture;
 
+        #region getter / setter
+        public List<Scene> Scenes
+        {
+            get { return _scenes; }
+        }
+
+        public List<Scene> ScenesToUpdate
+        {
+            get { return _scenesToUpdate; }
+        } 
+
+        public SpriteBatch SpriteBatch
+        {
+            get { return _spriteBatch; }
+            set { _spriteBatch = value; }
+        }
+
+        public SpriteFont Font
+        {
+            get { return _font; }
+            set { _font = value; }
+        }
+
+        public Texture2D BlankTexture
+        {
+            get { return _blankTexture; }
+            set { _blankTexture = value; }
+        }
+        #endregion
+
         public SceneManager(Game game)
             : base(game)
         {
         }
 
+        protected override void LoadContent()
+        {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _blankTexture = Game.Content.Load<Texture2D>("Textures/blank");
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+	        _scenesToUpdate.Clear();
+ 
+	        foreach (Scene scene in _scenes)
+		        _scenesToUpdate.Add(scene);
+ 
+	        bool othersceneHasFocus = !Game.IsActive;
+	        bool coveredByOtherscene = false;
+ 
+	        while (_scenesToUpdate.Count > 0)
+	        {
+		        Scene scene = _scenesToUpdate[_scenesToUpdate.Count - 1];
+		        _scenesToUpdate.RemoveAt(_scenesToUpdate.Count - 1);
+		        scene.Update(gameTime, othersceneHasFocus, coveredByOtherscene);
+ 
+		        if (scene.SceneState == SceneState.TransitionOn ||
+			        scene.SceneState == SceneState.Active)
+		        {
+			        if (!othersceneHasFocus)
+			        {
+				        scene.HandleInput();
+				        othersceneHasFocus = true;
+			        }
+
+                    if (!scene.IsPopup)
+				        coveredByOtherscene = true;
+		        }
+	        }
+        }
+
+
+        #region scene management
         public void AddScene(Scene scene)
         {
             scene.IsExiting = false;
@@ -44,39 +110,6 @@ namespace ROTP.Scenes.Common
                              Color.Black * alpha);
             _spriteBatch.End();
         }
-
-        public override void Update(GameTime gameTime)
-        {
-	        _scenesToUpdate.Clear();
- 
-	        foreach (Scene scene in _scenes)
-		        _scenesToUpdate.Add(scene);
- 
-	        bool othersceneHasFocus = !Game.IsActive;
-	        bool coveredByOtherscene = false;
- 
-	        while (_scenesToUpdate.Count > 0)
-	        {
-		        Scene scene = _scenesToUpdate[_scenesToUpdate.Count - 1];
-		        _scenesToUpdate.RemoveAt(_scenesToUpdate.Count - 1);
-		        scene.Update(gameTime, othersceneHasFocus, coveredByOtherscene);
- 
-		        if (scene.SceneState == SceneState.TransitionOn ||
-			        scene.SceneState == SceneState.Active)
-		        {
-			        // Si c'est la première scène, lui donner l'accès aux entrées utilisateur.
-			        if (!othersceneHasFocus)
-			        {
-				        scene.HandleInput();
-				        othersceneHasFocus = true;
-			        }
- 
-			        // Si la scène courant n'est pas un pop-up et est active,
-			        // informez les scènes suivantes qu'elles sont recouverte.
-			        if (!scene.IsPopup)
-				        coveredByOtherscene = true;
-		        }
-	        }
-        }
+        #endregion
     }
 }

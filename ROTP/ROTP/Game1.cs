@@ -19,7 +19,7 @@ namespace ROTP
 
             Components.Add(manager);
 
-            new TestScene(manager).Add();
+            new GameScene(manager).Add();
         }
     }
 }

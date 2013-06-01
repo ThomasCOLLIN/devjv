@@ -24,19 +24,19 @@ namespace ROTP.Scenes.Common
             set { _isPopup = value; }
         }
 
-        public TimeSpan TransitionOnTime
+        protected TimeSpan TransitionOnTime
         {
             get { return _transitionOnTime; }
             set { _transitionOnTime = value; }
         }
 
-        public TimeSpan TransitionOffTime
+        protected TimeSpan TransitionOffTime
         {
             get { return _transitionOffTime; }
             set { _transitionOffTime = value; }
         }
 
-        public float TransitionPosition
+        protected float TransitionPosition
         {
             get { return _transitionPosition; }
             set { _transitionPosition = value; }
@@ -48,7 +48,7 @@ namespace ROTP.Scenes.Common
             set { _sceneState = value; }
         }
 
-        public bool OthersceneHasFocus
+        protected bool OthersceneHasFocus
         {
             get { return _othersceneHasFocus; }
             set { _othersceneHasFocus = value; }
@@ -113,17 +113,17 @@ namespace ROTP.Scenes.Common
 
         private bool UpdateTransition(GameTime gameTime, TimeSpan time, int direction)
         {
-        	float transitionDelta = time == TimeSpan.Zero
-                ? 1 : (float) (gameTime.ElapsedGameTime.TotalMilliseconds / time.TotalMilliseconds);
+            float transitionDelta = time == TimeSpan.Zero
+                ? 1
+                : (float)(gameTime.ElapsedGameTime.TotalMilliseconds / time.TotalMilliseconds);
 
             _transitionPosition += transitionDelta * direction;
 
-            bool endTransition = ((direction < 0) && (_transitionPosition <= 0))
-                || ((direction > 0) && (_transitionPosition >= 1));
-
+            // Est-on arrivé à la fin de la transition?
+            bool endTransition = ((direction < 0) && (_transitionPosition <= 0)) ||
+                                 ((direction > 0) && (_transitionPosition >= 1));
             if (endTransition)
-        		_transitionPosition = MathHelper.Clamp(_transitionPosition, 0, 1);
-
+                _transitionPosition = MathHelper.Clamp(_transitionPosition, 0, 1);
             return !endTransition;
         }
 
@@ -140,6 +140,8 @@ namespace ROTP.Scenes.Common
             _sceneManager.AddScene(this);
         }
 
-        public virtual void HandleInput() { }
+        public virtual void HandleInput()
+        {
+        }
     }
 }

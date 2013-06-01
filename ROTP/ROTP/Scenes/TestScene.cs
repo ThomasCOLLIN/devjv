@@ -8,8 +8,6 @@ namespace ROTP.Scenes
 {
     class TestScene : Scene
     {
-        SpriteBatch spriteBatch;
-
         Model myModel;
         float aspectRatio;
 
@@ -23,15 +21,14 @@ namespace ROTP.Scenes
         public TestScene(SceneManager manager)
             : base(manager)
         {
+            TransitionOnTime = TimeSpan.FromSeconds(3);
+            TransitionOffTime = TimeSpan.FromSeconds(3);
         }
 
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
             //Load the test model
-            myModel = Game.Content.Load<Model>("Models\\p1_wedge");
+            myModel = SceneManager.Game.Content.Load<Model>("Models\\p1_wedge");
         }
 
         protected override void UnloadContent()
@@ -39,23 +36,14 @@ namespace ROTP.Scenes
             // TODO: Unload any non ContentManager content here
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime, bool otherSceneHasFocus, bool coveredByOtherScene)
         {
-            // Allows the game to exit
+            base.Update(gameTime, otherSceneHasFocus, coveredByOtherScene);
 
-            // Pad Only Version
-            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-            //    this.Exit();
-
-            //Keyboard + Pad Version
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Game.Exit();
-
-            updateInput(gameTime);
-
-            modelRotation += (float)gameTime.ElapsedGameTime.TotalMilliseconds * MathHelper.ToRadians(0.1f);
-
-            base.Update(gameTime);
+            if (IsActive)
+            {
+                modelRotation += (float)gameTime.ElapsedGameTime.TotalMilliseconds * MathHelper.ToRadians(0.1f);
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -83,11 +71,26 @@ namespace ROTP.Scenes
                 mesh.Draw();
             }
 
-            base.Draw(gameTime);
+            if (TransitionPosition > 0)
+            {
+                SceneManager.FadeBackBufferToBlack(1f - TransitionAlpha);
+
+                GraphicsDevice.BlendState = BlendState.Opaque;
+                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            }
         }
 
 
-        protected void updateInput(GameTime gameTime)
+        public override void HandleInput()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                SceneManager.Game.Exit();
+
+            updateInput();
+        }
+
+        protected void updateInput()
         {
             // Get the game pad state.
             GamePadState currentState = GamePad.GetState(PlayerIndex.One);
@@ -144,6 +147,5 @@ namespace ROTP.Scenes
                 modelRotation = 0.0f;
             }
         }
-
     }
 }
