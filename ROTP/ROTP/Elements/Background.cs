@@ -18,11 +18,20 @@ namespace ROTP.Elements
 
         Matrix viewMatrix;
         Matrix projectionMatrix;
-        VertexPositionTexture[] vertices;
         VertexBuffer cityVertexBuffer;
 
         Effect effect;
         Texture2D sceneryTexture;
+
+        // Light and camera
+        Vector3 lightDirection = new Vector3(3, -2, 5);
+        Vector3 cameraPosition; // la position de la camera dans l'espace
+        Vector3 cameraLookAt;  // le point vers lequel la camera est dirigée
+
+        // Mouse state
+        int mouseScrollValue;
+        int mouseX;
+        int mouseY;
 
         int[,] floorPlan;
         int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
@@ -35,6 +44,8 @@ namespace ROTP.Elements
         /// </summary>
         public void LoadContent(ContentManager content, SpriteBatch sp, GraphicsDeviceManager graphics)
         {
+            lightDirection.Normalize();
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = sp;
             this.graphics = graphics;
@@ -63,7 +74,11 @@ namespace ROTP.Elements
         /// </summary>
         public void Update()
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
+                throw new UnauthorizedAccessException();
 
+            UpdateCamera();
+            UpdateMouseValues();
         }
 
         /// <summary>
@@ -75,6 +90,9 @@ namespace ROTP.Elements
             graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
             DrawCity();
+
+            viewMatrix = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 0.2f, 500.0f);
         }
 
         #endregion
@@ -86,8 +104,80 @@ namespace ROTP.Elements
         /// </summary>
         private void SetUpCamera()
         {
-            viewMatrix = Matrix.CreateLookAt(new Vector3(20, 13, -5), new Vector3(8, 0, -7), new Vector3(0, 1, 0));
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 0.2f, 500.0f);
+            //Init
+            cameraPosition = new Vector3(10, 2, -10);
+            cameraLookAt = new Vector3(0, 2, 0);
+
+        }
+
+        /// <summary>
+        /// Update the camera (position, direction...) using entries
+        /// </summary>
+        private void UpdateCamera()
+        {
+            // Listen to the  keyboard
+
+            Vector3 dir = cameraLookAt - cameraPosition;
+            dir.Normalize();
+            dir /= 4; // Diminue la vitesse
+
+            Vector3 dirN = dir;
+            dirN.X = dir.Z;
+            dirN.Z = -dir.X;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                cameraPosition += dir;
+                cameraLookAt += dir;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                cameraPosition -= dir;
+                cameraLookAt -= dir;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                cameraPosition += dirN;
+                cameraLookAt += dirN;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                cameraPosition -= dirN;
+                cameraLookAt -= dirN;
+            }
+
+            // Listen to the mouse
+            if (Mouse.GetState().ScrollWheelValue > mouseScrollValue)
+            {
+                cameraPosition += dir * 10;
+                cameraLookAt += dir * 10;
+            }
+            if (Mouse.GetState().ScrollWheelValue < mouseScrollValue)
+            {
+                cameraPosition -= dir * 2;
+                cameraLookAt -= dir * 2;
+            }
+
+            
+            if (((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX) || Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                Matrix rotationMatrix = Matrix.CreateRotationY((float)0.01);
+                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                cameraPosition = cameraLookAt + transformedReference;
+            }
+            if (((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX) || Keyboard.GetState().IsKeyDown(Keys.Z))
+            {
+                Matrix rotationMatrix = Matrix.CreateRotationY(-(float)0.01);
+                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                cameraPosition = cameraLookAt + transformedReference;
+            }
+        }
+
+        private void UpdateMouseValues()
+        {
+            mouseScrollValue = Mouse.GetState().ScrollWheelValue;
+            mouseX = Mouse.GetState().X;
+            mouseY = Mouse.GetState().Y;
         }
 
         /// <summary>
@@ -193,6 +283,9 @@ namespace ROTP.Elements
             effect.Parameters["xView"].SetValue(viewMatrix);
             effect.Parameters["xProjection"].SetValue(projectionMatrix);
             effect.Parameters["xTexture"].SetValue(sceneryTexture);
+            effect.Parameters["xEnableLighting"].SetValue(true);
+            effect.Parameters["xLightDirection"].SetValue(lightDirection);
+            effect.Parameters["xAmbient"].SetValue(0.5f);
 
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
@@ -200,6 +293,8 @@ namespace ROTP.Elements
                 graphics.GraphicsDevice.SetVertexBuffer(cityVertexBuffer);
                 graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
+
+
         }
 
         #endregion
