@@ -18,10 +18,13 @@ namespace ROTP
 
         Elements.Background gameBackground;
 
+        GameInterface gameInterface;
+
         public ROTP()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.IsMouseVisible = true;
         }
 
         /// <summary>
@@ -52,6 +55,10 @@ namespace ROTP
 
             gameBackground = new Elements.Background();
             gameBackground.LoadContent(Content, spriteBatch, graphics);
+
+            gameInterface = new GameInterface(graphics);
+            gameInterface.Load(Content);
+
         }
 
         /// <summary>
@@ -79,6 +86,8 @@ namespace ROTP
             base.Update(gameTime);
 
             gameBackground.Update();
+            gameInterface.Update(this, Mouse.GetState());
+            
         }
 
         /// <summary>
@@ -90,6 +99,8 @@ namespace ROTP
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             gameBackground.Draw();
+
+            gameInterface.Draw(spriteBatch);
 
             base.Draw(gameTime);
         }

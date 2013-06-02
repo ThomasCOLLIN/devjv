@@ -108,6 +108,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\Background.cs" />
+    <Compile Include="Interface\GameInterface.cs" />
+    <Compile Include="Interface\InterfaceTools.cs" />
+    <Compile Include="Interface\ResizeBar.cs" />
+    <Compile Include="Interface\TowerIcon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
