@@ -11,7 +11,14 @@ namespace ROTP
     {
         public Game1()
         {
-            new GraphicsDeviceManager(this);
+            Window.Title = "Rise of the Pony - Pony Stark vs Etramel";
+
+            new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferHeight = 500,
+                PreferredBackBufferWidth = 500,
+                IsFullScreen = false
+            };
            
             Content.RootDirectory = "Content";
 

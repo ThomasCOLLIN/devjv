@@ -13,44 +13,38 @@ namespace ROTP.Elements
 {
     class Background
     {
-        private SpriteBatch spriteBatch;
-        GraphicsDeviceManager graphics;
+        private GraphicsDevice _device;
 
-        Matrix viewMatrix;
-        Matrix projectionMatrix;
-        VertexBuffer cityVertexBuffer;
+        private Matrix viewMatrix;
+        private Matrix projectionMatrix;
+        private VertexBuffer cityVertexBuffer;
 
-        Effect effect;
-        Texture2D sceneryTexture;
+        private Effect effect;
+        private Texture2D sceneryTexture;
 
         // Light and camera
-        Vector3 lightDirection = new Vector3(3, -2, 5);
-        Vector3 cameraPosition; // la position de la camera dans l'espace
-        Vector3 cameraLookAt;  // le point vers lequel la camera est dirigée
+        private Vector3 lightDirection = new Vector3(3, -2, 5);
+        private Vector3 cameraPosition; // la position de la camera dans l'espace
+        private Vector3 cameraLookAt;  // le point vers lequel la camera est dirigée
 
         // Mouse state
-        int mouseScrollValue;
-        int mouseX;
-        int mouseY;
+        private int mouseScrollValue;
+        private int mouseX;
+        private int mouseY;
 
-        int[,] floorPlan;
-        int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
+        private int[,] floorPlan;
+        private int[] buildingHeights = new int[] { 0, 2, 2, 6, 5, 4 };
 
         #region Public methods
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        public void LoadContent(ContentManager content, SpriteBatch sp, GraphicsDeviceManager graphics)
+        public Background(GraphicsDevice device)
+        {
+            _device = device;
+        }
+
+        public void LoadContent(ContentManager content)
         {
             lightDirection.Normalize();
-
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = sp;
-            this.graphics = graphics;
-            //device = graphics.GraphicsDevice;
-
             effect = content.Load<Effect>("effects");
             sceneryTexture = content.Load<Texture2D>("Textures\\texturemap");
 
@@ -59,20 +53,15 @@ namespace ROTP.Elements
             SetUpVertices();
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         public void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
         public void Update()
+        {
+        }
+
+        public void HandleInput()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Enter))
                 throw new UnauthorizedAccessException();
@@ -81,18 +70,14 @@ namespace ROTP.Elements
             UpdateMouseValues();
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw()
         {
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            _device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
             DrawCity();
 
             viewMatrix = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
-            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, graphics.GraphicsDevice.Viewport.AspectRatio, 0.2f, 500.0f);
+            projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
         }
 
         #endregion
@@ -247,7 +232,7 @@ namespace ROTP.Elements
                 }
             }
 
-            cityVertexBuffer = new VertexBuffer(graphics.GraphicsDevice, VertexPositionNormalTexture.VertexDeclaration, verticesList.Count, BufferUsage.WriteOnly);
+            cityVertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, verticesList.Count, BufferUsage.WriteOnly);
             cityVertexBuffer.SetData<VertexPositionNormalTexture>(verticesList.ToArray());        
             
         }
@@ -290,8 +275,8 @@ namespace ROTP.Elements
             foreach (EffectPass pass in effect.CurrentTechnique.Passes)
             {
                 pass.Apply();
-                graphics.GraphicsDevice.SetVertexBuffer(cityVertexBuffer);
-                graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
+                _device.SetVertexBuffer(cityVertexBuffer);
+                _device.DrawPrimitives(PrimitiveType.TriangleList, 0, cityVertexBuffer.VertexCount / 3);
             }
 
 
