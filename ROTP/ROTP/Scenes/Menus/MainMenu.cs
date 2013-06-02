@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using ROTP.Scenes.Common;
 using ROTP.Scenes.Menus.Common;
+using Microsoft.Xna.Framework.Input;
 
 namespace ROTP.Scenes.Menus
 {
@@ -19,6 +20,14 @@ namespace ROTP.Scenes.Menus
             MenuItem exit = new MenuItem("Quitter");
             exit.Selected += OnExitSelected;
             MenuItems.Add(exit);
+        }
+
+        public override void HandleInput()
+        {
+            base.HandleInput();
+
+            if (IsKeyNowPressed(Keys.Right))
+                OnSelect();
         }
 
         public override void OnCancel()

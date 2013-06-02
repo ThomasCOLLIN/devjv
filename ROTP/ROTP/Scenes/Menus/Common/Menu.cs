@@ -22,6 +22,16 @@ namespace ROTP.Scenes.Menus.Common
             set { _menuItems = value; }
         }
 
+        protected KeyboardState Keyboardstate
+        {
+            get { return _keyboardstate; }
+        }
+
+        protected KeyboardState PreviousKeyboardState
+        {
+            get { return _previousKeyboardState; }
+        }
+
         public Menu(SceneManager manager, string title)
             : base(manager)
         {
@@ -111,7 +121,7 @@ namespace ROTP.Scenes.Menus.Common
             _menuItems[_selectedIndex].OnItemSelected();
         }
 
-        private bool IsKeyNowPressed(Keys key)
+        protected bool IsKeyNowPressed(Keys key)
         {
             return _keyboardstate.IsKeyDown(key)
                 && _previousKeyboardState.IsKeyUp(key);
