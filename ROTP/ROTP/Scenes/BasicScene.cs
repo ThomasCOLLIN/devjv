@@ -108,6 +108,5 @@ namespace ROTP.Scenes
 
             }
         }
-
     }
 }
