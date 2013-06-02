@@ -19,7 +19,8 @@ namespace ROTP
         private ResizeBar _lifeBar;
         private ResizeBar _waveBar;
 
-        private TowerIcon _towerIcon;
+        private List<TowerIcon> _towerIcons;
+        private TowerInformationsBox _towerInformationBox;
 
         public GameInterface(GraphicsDevice device)
         {
@@ -27,7 +28,25 @@ namespace ROTP
 
             _lifeBar = new ResizeBar(new Vector2(0, 0), @"Textures\lifebar", width: 300, maxLife: 400, life: 400);
             _waveBar = new ResizeBar(new Vector2(0, 50), @"Textures\wavebar", width: 300, maxLife: 300, life: 0);
-            _towerIcon = new TowerIcon(new Vector2(0, 120), @"Textures\eiffel-tower-icon");
+
+
+            _towerIcons = new List<TowerIcon>();
+           
+            TowerIcon towerIcon = new TowerIcon(new Vector2(0, 120), @"Textures\eiffel-tower-icon");
+            towerIcon.Text = "Toto\nThis is Sparta !";
+            _towerIcons.Add(towerIcon);
+
+
+            towerIcon = new TowerIcon(new Vector2(50, 120), @"Textures\eiffel-tower-icon");
+            towerIcon.Text = "Titi";
+            _towerIcons.Add(towerIcon);
+
+            towerIcon = new TowerIcon(new Vector2(100, 120), @"Textures\eiffel-tower-icon");
+            towerIcon.Text = "Tata";
+            _towerIcons.Add(towerIcon);
+
+
+            _towerInformationBox = new TowerInformationsBox();
         }
 
         public void Load(ContentManager content)
@@ -35,7 +54,14 @@ namespace ROTP
             _interfaceTexture = content.Load<Texture2D>(@"Textures\interface");
             _lifeBar.Load(content);
             _waveBar.Load(content);
-            _towerIcon.Load(content);
+
+            foreach (var towerIcon in _towerIcons)
+            {
+                towerIcon.Load(content);    
+            }
+
+            _towerInformationBox.Load(content, new Vector2(0, 200));
+
         }
 
         public void Update()
@@ -54,7 +80,15 @@ namespace ROTP
             //        _waveBar.ChangeLife(1);
             //    }
             //}
-            _towerIcon.HandleInput();
+            foreach (var towerIcon in _towerIcons)
+            {
+                if (towerIcon.IsSelected())
+                {
+                    _towerInformationBox.Display();
+                    _towerInformationBox.Text = towerIcon.Text;
+                    break;
+                }
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -68,7 +102,11 @@ namespace ROTP
 
             _lifeBar.Draw(spriteBatch);
             _waveBar.Draw(spriteBatch);
-            _towerIcon.Draw(spriteBatch);
+            foreach (var towerIcon in _towerIcons)
+            {
+                towerIcon.Draw(spriteBatch);    
+            }
+            _towerInformationBox.Draw(spriteBatch);
         }
 
     #region private

@@ -15,6 +15,7 @@ namespace ROTP.Interface
         private Rectangle _towerIconBoundsRect;
         private Int32 _sizeIcon;
         private String _textureName;
+        public String Text { get; set; }
 
         public TowerIcon(Vector2 position, String textureName)
         {
@@ -39,15 +40,12 @@ namespace ROTP.Interface
             spriteBatch.End();
         }
 
-        public void HandleInput()
+        public Boolean IsSelected()
         {
             if (ToolsInterface.isMouseLeftPressed())
-            {
-                if (ToolsInterface.isMouseIntersects(_position, _towerIconBoundsRect))
-                {
-                    //InterfaceEventManager.InvokeMessenger();
-                }
-            }
+                return (ToolsInterface.isMouseIntersects(_position, _towerIconBoundsRect));
+
+            return false;
         }
     }
 }
