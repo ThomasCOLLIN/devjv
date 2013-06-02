@@ -45,6 +45,7 @@ namespace ROTP.Scenes.Common
         public SceneManager(Game game)
             : base(game)
         {
+            Game.IsMouseVisible = true;
         }
 
         protected override void LoadContent()
