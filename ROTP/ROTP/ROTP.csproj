@@ -116,6 +116,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="ROTP.cs" />
+    <Compile Include="Scenes\BasicScene.cs" />
+    <Compile Include="Scenes\Common\Scene.cs" />
+    <Compile Include="Scenes\Common\SceneManager.cs" />
+    <Compile Include="Scenes\Common\SceneStateEnum.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\TestScene.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

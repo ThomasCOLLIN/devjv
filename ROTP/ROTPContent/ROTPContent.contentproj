@@ -72,6 +72,12 @@
   <ItemGroup>
     <Compile Include="Textures\interface.jpg">
       <Name>interface</Name>
+	   <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+    <Compile Include="Textures\blank.png">
+      <Name>blank</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
