@@ -109,10 +109,12 @@
   <ItemGroup>
     <Compile Include="Elements\Background.cs" />
     <Compile Include="Interface\GameInterface.cs" />
-    <Compile Include="Interface\InterfaceTools.cs" />
+    <Compile Include="Interface\InterfaceEventManager.cs" />
+    <Compile Include="Interface\ToolsInterface.cs" />
     <Compile Include="Interface\ResizeBar.cs" />
     <Compile Include="Interface\TowerIcon.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Interface\TowerInformations.cs" />
     <Compile Include="Scenes\BasicScene.cs" />
     <Compile Include="Scenes\Common\Scene.cs" />
     <Compile Include="Scenes\Common\SceneManager.cs" />

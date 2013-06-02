@@ -12,8 +12,9 @@ namespace ROTP
 {
     public class GameInterface
     {
-        private Vector2 _backgroundPosition;
-        private Texture2D _backgroundTexture;
+        private Vector2 _interfacePosition;
+        private Texture2D _interfaceTexture;
+        private Rectangle _interfaceBoundsRect;
         private int _screenHeight;
         private ResizeBar _lifeBar;
         private ResizeBar _waveBar;
@@ -31,7 +32,7 @@ namespace ROTP
 
         public void Load(ContentManager content)
         {
-            _backgroundTexture = content.Load<Texture2D>(@"Textures\interface");
+            _interfaceTexture = content.Load<Texture2D>(@"Textures\interface");
             _lifeBar.Load(content);
             _waveBar.Load(content);
             _towerIcon.Load(content);
@@ -43,24 +44,25 @@ namespace ROTP
 
         public void HandleInput()
         {
-            MouseState mouseState = Mouse.GetState();
+            _interfaceBoundsRect = new Rectangle((Int32)_interfacePosition.X, (Int32)_interfacePosition.Y, _interfaceTexture.Width, _interfaceTexture.Height);
 
-            if (InterfaceTools.isMouseLeftPressed(mouseState))
-            {
-                if (InterfaceTools.isMouseIntersects(mouseState, _backgroundPosition, _backgroundTexture))
-                {
-                    _lifeBar.ChangeLife(-1);
-                    _waveBar.ChangeLife(1);
-                }
-            }
+            //if (ToolsInterface.isMouseLeftPressed())
+            //{
+            //    if (ToolsInterface.isMouseIntersects(_interfacePosition, _interfaceBoundsRect))
+            //    {
+            //        _lifeBar.ChangeLife(-1);
+            //        _waveBar.ChangeLife(1);
+            //    }
+            //}
+            _towerIcon.HandleInput();
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            _backgroundPosition = new Vector2(0, _screenHeight - _backgroundTexture.Height);
+            _interfacePosition = new Vector2(0, _screenHeight - _interfaceTexture.Height);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(_backgroundTexture, _backgroundPosition, Color.White);
+            spriteBatch.Draw(_interfaceTexture, _interfacePosition, Color.White);
             spriteBatch.End();
             //
 

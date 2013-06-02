@@ -12,12 +12,17 @@ namespace ROTP.Interface
     {
         private Vector2 _position;
         private Texture2D _texture;
+        private Rectangle _towerIconBoundsRect;
+        private Int32 _sizeIcon;
         private String _textureName;
 
         public TowerIcon(Vector2 position, String textureName)
         {
             _position = position;
             _textureName = textureName;
+            _sizeIcon = 45;
+            _towerIconBoundsRect = new Rectangle((Int32)_position.X, (Int32)_position.Y, _sizeIcon, _sizeIcon);
+
         }
 
         public void Load(ContentManager content)
@@ -27,12 +32,22 @@ namespace ROTP.Interface
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            Rectangle displayRect = new Rectangle((Int32)_position.X, (Int32)_position.Y, 45, 45);
+            Rectangle displayRect = new Rectangle((Int32)_position.X, (Int32)_position.Y, _sizeIcon, _sizeIcon);
 
             spriteBatch.Begin();
             spriteBatch.Draw(_texture, displayRect, Color.White);
             spriteBatch.End();
         }
 
+        public void HandleInput()
+        {
+            if (ToolsInterface.isMouseLeftPressed())
+            {
+                if (ToolsInterface.isMouseIntersects(_position, _towerIconBoundsRect))
+                {
+                    //InterfaceEventManager.InvokeMessenger();
+                }
+            }
+        }
     }
 }
