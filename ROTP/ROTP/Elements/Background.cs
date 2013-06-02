@@ -63,9 +63,6 @@ namespace ROTP.Elements
 
         public void HandleInput()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Enter))
-                throw new UnauthorizedAccessException();
-
             UpdateCamera();
             UpdateMouseValues();
         }
