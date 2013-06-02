@@ -71,7 +71,7 @@ namespace ROTP.Elements
         {
             _device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            DrawCity();
+            DrawRoom();
 
             viewMatrix = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
@@ -97,9 +97,7 @@ namespace ROTP.Elements
         /// </summary>
         private void UpdateCamera()
         {
-            // Listen to the  keyboard
-
-            Vector3 dir = cameraLookAt - cameraPosition;
+             Vector3 dir = cameraLookAt - cameraPosition;
             dir.Normalize();
             dir /= 4; // Diminue la vitesse
 
@@ -107,51 +105,100 @@ namespace ROTP.Elements
             dirN.X = dir.Z;
             dirN.Z = -dir.X;
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Up))
-            {
-                cameraPosition += dir;
-                cameraLookAt += dir;
-            }
-            if (Keyboard.GetState().IsKeyDown(Keys.Down))
-            {
-                cameraPosition -= dir;
-                cameraLookAt -= dir;
-            }
+            // Gauche - Droite
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                cameraPosition += dirN;
-                cameraLookAt += dirN;
+                if (cameraPosition.X + dirN.X < floorPlan.GetLength(0) - 1 && cameraPosition.X + dirN.X > 1
+                    && -(cameraPosition.Z + dirN.Z) < floorPlan.GetLength(1) -1 && -(cameraPosition.Z + dirN.Z) > 1)
+                {
+                    cameraPosition += dirN;
+                    cameraLookAt += dirN;
+                }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                cameraPosition -= dirN;
-                cameraLookAt -= dirN;
+                if (cameraPosition.X - dirN.X < floorPlan.GetLength(0) - 1 && cameraPosition.X - dirN.X > 1
+                    && -(cameraPosition.Z - dirN.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - dirN.Z) > 1)
+                {
+                    cameraPosition -= dirN;
+                    cameraLookAt -= dirN;
+                }
             }
 
-            // Listen to the mouse
+            // Travelling
             if (Mouse.GetState().ScrollWheelValue > mouseScrollValue)
             {
-                cameraPosition += dir * 10;
-                cameraLookAt += dir * 10;
+                if (cameraPosition.X + (dir.X * 10) < floorPlan.GetLength(0) - 1 && cameraPosition.X + (dir.X * 10) > 1
+                    && -(cameraPosition.Z + (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z + (dir.Z * 10)) > 1)
+                {
+                    cameraPosition += dir * 10;
+                    cameraLookAt += dir * 10;
+                }
             }
             if (Mouse.GetState().ScrollWheelValue < mouseScrollValue)
             {
-                cameraPosition -= dir * 2;
-                cameraLookAt -= dir * 2;
+                if (cameraPosition.X - (dir.X * 10) < floorPlan.GetLength(0) - 1 && cameraPosition.X - (dir.X * 10) > 1
+                    && -(cameraPosition.Z - (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - (dir.Z * 10)) > 1)
+                {
+                    cameraPosition -= dir * 10;
+                    cameraLookAt -= dir * 10;
+                }
             }
-
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+            {
+                if (cameraPosition.X + dir.X < floorPlan.GetLength(0) - 1 && cameraPosition.X + dir.X > 1
+                    && -(cameraPosition.Z + dir.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z + dir.Z) > 1)
+                {
+                    cameraPosition += dir;
+                    cameraLookAt += dir;
+                }
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+            {
+                if (cameraPosition.X - dir.X < floorPlan.GetLength(0) - 1 && cameraPosition.X - dir.X > 1
+                    && -(cameraPosition.Z - dir.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - dir.Z) > 1)
+                {
+                    cameraPosition -= dir;
+                    cameraLookAt -= dir;
+                }
+            }
             
-            if (((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX) || Keyboard.GetState().IsKeyDown(Keys.A))
+            // rotation autour d'un point
+            if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX)
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY((float)0.01);
                 Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
-                cameraPosition = cameraLookAt + transformedReference;
+
+                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
+                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
+                {
+                    cameraPosition = cameraLookAt + transformedReference;
+                }
             }
-            if (((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX) || Keyboard.GetState().IsKeyDown(Keys.Z))
+            if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX)
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY(-(float)0.01);
                 Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
-                cameraPosition = cameraLookAt + transformedReference;
+
+                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
+                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
+                {
+                    cameraPosition = cameraLookAt + transformedReference;
+                }
+            }
+
+            // rotation de la caméra
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+            {
+                Matrix rotationMatrix = Matrix.CreateRotationY((float)0.01);
+                Vector3 transformedReference = Vector3.Transform(cameraLookAt - cameraPosition, rotationMatrix);
+                cameraLookAt = cameraPosition + transformedReference;
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Z))
+            {
+                Matrix rotationMatrix = Matrix.CreateRotationY(-(float)0.01);
+                Vector3 transformedReference = Vector3.Transform(cameraLookAt - cameraPosition, rotationMatrix);
+                cameraLookAt = cameraPosition + transformedReference;
             }
         }
 
@@ -167,66 +214,66 @@ namespace ROTP.Elements
         /// </summary>
         private void SetUpVertices()
         {
-            int cityWidth = floorPlan.GetLength(0);
-            int cityLength = floorPlan.GetLength(1);
+            int width = floorPlan.GetLength(0);
+            int length = floorPlan.GetLength(1);
             int differentBuildings = buildingHeights.Length - 1;
             float imagesInTexture = 1 + differentBuildings * 2;
 
             List<VertexPositionNormalTexture> verticesList = new List<VertexPositionNormalTexture>();
-            for (int x = 0; x < cityWidth; x++)
+            for (int x = 0; x < width; x++)
             {
-                for (int z = 0; z < cityLength; z++)
+                for (int z = 0; z < length; z++)
                 {
-                    int currentbuilding = floorPlan[x, z];
 
                     //floor or ceiling
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(0, 1, 0), new Vector2(currentbuilding * 2 / imagesInTexture, 1)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 1, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(0, 1, 0), new Vector2((currentbuilding * 2 + 1) / imagesInTexture, 1)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(0, 1, 0), new Vector2(0, 1)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(0, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 1)));
 
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 1, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 1, 0), new Vector2((currentbuilding * 2 + 1) / imagesInTexture, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(0, 1, 0), new Vector2((currentbuilding * 2 + 1) / imagesInTexture, 1)));
-
-                    if (currentbuilding != 0)
-                    {
-                        //front wall
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(0, 0, -1), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-
-                        //back wall
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 0, 1), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-
-                        //left wall
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z - 1), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, buildingHeights[currentbuilding], -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(-1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-
-                        //right wall
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 1)));
-
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z - 1), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2 - 1) / imagesInTexture, 0)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 1)));
-                        verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, buildingHeights[currentbuilding], -z), new Vector3(1, 0, 0), new Vector2((currentbuilding * 2) / imagesInTexture, 0)));
-                    }
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(0, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 1)));
                 }
+
+                // Wall 1
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, 0), new Vector3(0, 0, -1), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 10, 0), new Vector3(0, 0, -1), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, 0), new Vector3(0, 0, -1), new Vector2((3 * 2 - 1) / imagesInTexture, 1)));
+                
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 10, 0), new Vector3(0, 0, -1), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, 0), new Vector3(0, 0, -1), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 10, 0), new Vector3(0, 0, -1), new Vector2((3 * 2) / imagesInTexture, 0)));
+
+                // Wall 3
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -length), new Vector3(0, 0, 1), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -length), new Vector3(0, 0, 1), new Vector2((3 * 2 - 1) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 10, -length), new Vector3(0, 0, 1), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 10, -length), new Vector3(0, 0, 1), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 10, -length), new Vector3(0, 0, 1), new Vector2((3 * 2) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -length), new Vector3(0, 0, 1), new Vector2((3 * 2) / imagesInTexture, 1)));
+            }
+
+            for (int z = 0; z < length; z++)
+            {
+                // Wall 2
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 0, -z), new Vector3(-1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 0, -z - 1), new Vector3(-1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 10, -z - 1), new Vector3(-1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 10, -z - 1), new Vector3(-1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 10, -z), new Vector3(-1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(width, 0, -z), new Vector3(-1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 1)));
+
+                // Wall 4
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 0, -z), new Vector3(1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 10, -z - 1), new Vector3(1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 0, -z - 1), new Vector3(1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 1)));
+
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 10, -z - 1), new Vector3(1, 0, 0), new Vector2((3 * 2 - 1) / imagesInTexture, 0)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 0, -z), new Vector3(1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 1)));
+                verticesList.Add(new VertexPositionNormalTexture(new Vector3(0, 10, -z), new Vector3(1, 0, 0), new Vector2((3 * 2) / imagesInTexture, 0)));
+
             }
 
             cityVertexBuffer = new VertexBuffer(_device, VertexPositionNormalTexture.VertexDeclaration, verticesList.Count, BufferUsage.WriteOnly);
@@ -256,9 +303,9 @@ namespace ROTP.Elements
         }
 
         /// <summary>
-        /// Draw the city
+        /// Draw the room
         /// </summary>
-        private void DrawCity()
+        private void DrawRoom()
         {
             effect.CurrentTechnique = effect.Techniques["Textured"];
             effect.Parameters["xWorld"].SetValue(Matrix.Identity);
