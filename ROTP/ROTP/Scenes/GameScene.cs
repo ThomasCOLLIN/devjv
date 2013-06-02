@@ -60,8 +60,8 @@ namespace ROTP.Scenes
 
         public override void HandleInput()
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                SceneManager.Game.Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Remove();
 
             gameBackground.HandleInput();
             gameInterface.HandleInput();

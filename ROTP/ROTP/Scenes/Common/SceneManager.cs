@@ -52,6 +52,7 @@ namespace ROTP.Scenes.Common
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             _blankTexture = Game.Content.Load<Texture2D>("Textures/blank");
+            _font = Game.Content.Load<SpriteFont>("Texts/TestText");
         }
 
         public override void Update(GameTime gameTime)

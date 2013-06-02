@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using ROTP.Scenes.Common;
+using ROTP.Scenes.Menus;
 using ROTP.Scenes;
 
 namespace ROTP
@@ -26,7 +27,7 @@ namespace ROTP
 
             Components.Add(manager);
 
-            new GameScene(manager).Add();
+            new MainMenu(manager).Add();
         }
     }
 }
