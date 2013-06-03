@@ -118,7 +118,8 @@ namespace ROTP.Scenes.Menus.Common
 
         public virtual void OnSelect()
         {
-            _menuItems[_selectedIndex].OnItemSelected();
+            if (_selectedIndex >= 0 && _selectedIndex < _menuItems.Count)
+                _menuItems[_selectedIndex].OnItemSelected();
         }
 
         protected bool IsKeyNowPressed(Keys key)

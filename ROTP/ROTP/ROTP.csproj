@@ -114,6 +114,9 @@
     <Compile Include="Interface\TowerIcon.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Interface\TowerInformationsBox.cs" />
+    <Compile Include="Save\Options.cs" />
+    <Compile Include="Save\SaveManager.cs" />
+    <Compile Include="Scenes\Common\AchievementsMenu.cs" />
     <Compile Include="Scenes\Menus\Common\Menu.cs" />
     <Compile Include="Scenes\Menus\Common\MenuItem.cs" />
     <Compile Include="Scenes\Menus\MainMenu.cs" />
@@ -124,6 +127,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\Menus\OptionsMenu.cs" />
     <Compile Include="Scenes\TestScene.cs" />
   </ItemGroup>
   <ItemGroup>
