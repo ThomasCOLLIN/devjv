@@ -49,7 +49,7 @@ namespace ROTP.Elements
             sceneryTexture = content.Load<Texture2D>("Textures\\texturemap");
 
             SetUpCamera();
-            LoadFloorPlan(20,15);
+            LoadFloorPlan(50,60);
             SetUpVertices();
         }
 
@@ -97,7 +97,8 @@ namespace ROTP.Elements
         /// </summary>
         private void UpdateCamera()
         {
-             Vector3 dir = cameraLookAt - cameraPosition;
+            Vector3 dir = cameraLookAt - cameraPosition;
+            dir.Y = 0;
             dir.Normalize();
             dir /= 4; // Diminue la vitesse
 
@@ -164,9 +165,10 @@ namespace ROTP.Elements
             }
             
             // rotation autour d'un point
-            if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX)
+            float angle = (float) 0.01;
+            if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX)
             {
-                Matrix rotationMatrix = Matrix.CreateRotationY((float)0.01);
+                Matrix rotationMatrix = Matrix.CreateRotationY(angle);
                 Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
 
                 if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
@@ -175,13 +177,41 @@ namespace ROTP.Elements
                     cameraPosition = cameraLookAt + transformedReference;
                 }
             }
-            if ((Mouse.GetState().LeftButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX)
+            if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX)
             {
-                Matrix rotationMatrix = Matrix.CreateRotationY(-(float)0.01);
+                Matrix rotationMatrix = Matrix.CreateRotationY(-angle);
                 Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
 
                 if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
                     && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
+                {
+                    cameraPosition = cameraLookAt + transformedReference;
+                }
+            }
+            if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().Y > mouseY)
+            {
+                Matrix rotationX = Matrix.CreateRotationX(-angle * dirN.X * 4);
+                Matrix rotationZ = Matrix.CreateRotationZ(-angle * dirN.Z * 4);
+                Matrix rotationMatrix = rotationX * rotationZ;
+                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+
+                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
+                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1
+                    && (cameraLookAt + transformedReference).Y > 0.05 && (cameraLookAt + transformedReference).Y < 21)
+                {
+                    cameraPosition = cameraLookAt + transformedReference;
+                }
+            }
+            if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().Y < mouseY)
+            {
+                Matrix rotationX = Matrix.CreateRotationX(angle * dirN.X * 4);
+                Matrix rotationZ = Matrix.CreateRotationZ(angle * dirN.Z * 4);
+                Matrix rotationMatrix = rotationX * rotationZ;
+                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+
+                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
+                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1
+                    && (cameraLookAt + transformedReference).Y > 0.05 && (cameraLookAt + transformedReference).Y < 21)
                 {
                     cameraPosition = cameraLookAt + transformedReference;
                 }
@@ -218,21 +248,22 @@ namespace ROTP.Elements
             int length = floorPlan.GetLength(1);
             int differentBuildings = buildingHeights.Length - 1;
             float imagesInTexture = 1 + differentBuildings * 2;
+            int texture;
 
             List<VertexPositionNormalTexture> verticesList = new List<VertexPositionNormalTexture>();
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < length; z++)
                 {
-
+                    texture = floorPlan[x, z];
                     //floor or ceiling
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(0, 1, 0), new Vector2(0, 1)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(0, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 1)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z), new Vector3(0, 1, 0), new Vector2(texture / imagesInTexture, 1)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(texture / imagesInTexture, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2((texture  + 1) / imagesInTexture, 1)));
 
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(0, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 0)));
-                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2(1 / imagesInTexture, 1)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x, 0, -z - 1), new Vector3(0, 1, 0), new Vector2(texture  / imagesInTexture, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z - 1), new Vector3(0, 1, 0), new Vector2((texture + 1) / imagesInTexture, 0)));
+                    verticesList.Add(new VertexPositionNormalTexture(new Vector3(x + 1, 0, -z), new Vector3(0, 1, 0), new Vector2((texture + 1) / imagesInTexture, 1)));
                 }
 
                 // Wall 1
@@ -295,7 +326,7 @@ namespace ROTP.Elements
                 for (int j = 0; j < y; j++)
                 {
                     if ((i == 0) || (i == x - 1) || (j == 0) || (j == y - 1))
-                        floorPlan[i, j] = 3;
+                        floorPlan[i, j] = 1;
                     else
                         floorPlan[i, j] = 0;
                 }
