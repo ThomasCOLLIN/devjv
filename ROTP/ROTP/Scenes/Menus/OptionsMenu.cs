@@ -3,6 +3,7 @@ using ROTP.Scenes.Common;
 using System;
 using Microsoft.Xna.Framework;
 using ROTP.Save;
+using System.Diagnostics;
 
 namespace ROTP.Scenes.Menus
 {
@@ -41,6 +42,8 @@ namespace ROTP.Scenes.Menus
 
         private void OnOkSelected(object sender, EventArgs args)
         {
+            bool res = SaveManager.SaveOptions(_options);
+            Trace.WriteLine("saved = " + res);
             OnCancel();
         }
     }

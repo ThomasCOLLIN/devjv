@@ -11,7 +11,7 @@ namespace ROTP.Save
 {
     class SaveManager
     {
-        private static readonly string optionPath = "User/options";
+        private static readonly string optionPath = "options.sav";
 
         public static bool SaveOptions(Options options)
         {
@@ -43,7 +43,7 @@ namespace ROTP.Save
             catch (Exception)
             {
                 Options options = new Options();
-                options.IsFullScreen = false;
+                options.IsFullScreen = true;
                 options.Resolution = new Vector2(1024, 720);
                 options.IsBgmOn = true;
                 options.IsSoundOn = true;
