@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ROTP.Scenes.Common;
 using ROTP.Elements;
 using Microsoft.Xna.Framework.Input;
+using ROTP.Scenes.Menus;
 
 namespace ROTP.Scenes
 {
@@ -60,8 +61,11 @@ namespace ROTP.Scenes
 
         public override void HandleInput()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Remove();
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                new MenuPause(SceneManager, this).Add();
+                return;
+            }
 
             gameBackground.HandleInput();
             gameInterface.HandleInput();

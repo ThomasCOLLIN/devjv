@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using ROTP.Scenes.Menus.Common;
+using ROTP.Scenes.Common;
+
+namespace ROTP.Scenes.Menus
+{
+    class MenuPause : Menu
+    {
+        private Scene _parent;
+
+        public MenuPause(SceneManager manager, Scene parent)
+            : base(manager, "Pause")
+        {
+            TransitionOnTime = TimeSpan.FromSeconds(1);
+            TransitionOffTime = TimeSpan.FromSeconds(1);
+            IsPopup = true;
+
+            this.
+
+            _parent = parent;
+
+            MenuItem cont = new MenuItem("Reprendre");
+            cont.Selected += OnContinueSelected;
+            MenuItems.Add(cont);
+
+            MenuItem quit = new MenuItem("Quitter");
+            quit.Selected += OnquitSelected;
+            MenuItems.Add(quit);
+        }
+
+        private void OnContinueSelected(object sender, EventArgs args)
+        {
+            Remove();
+        }
+
+        private void OnquitSelected(object sender, EventArgs args)
+        {
+            Remove();
+            _parent.Remove();
+        }
+    }
+}
