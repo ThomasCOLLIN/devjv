@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Storage;
 using System.IO;
 using System.Xml.Serialization;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace ROTP.Save
 {
@@ -23,8 +24,9 @@ namespace ROTP.Save
                 file.Close();
                 return true;
 	        }
-	        catch (Exception)
+	        catch (Exception e)
 	        {
+                Trace.WriteLine(e.Message);
                 return false;
 	        }
         }
@@ -43,7 +45,7 @@ namespace ROTP.Save
             catch (Exception)
             {
                 Options options = new Options();
-                options.IsFullScreen = true;
+                options.IsFullScreen = false;
                 options.Resolution = new Vector2(1024, 720);
                 options.IsBgmOn = true;
                 options.IsSoundOn = true;
