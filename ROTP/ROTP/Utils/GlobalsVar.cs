@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using ROTP.Scenes.Characters;
 
 namespace ROTP.Utils
 {
@@ -11,6 +12,7 @@ namespace ROTP.Utils
         static Vector3 _cameraPosition;
         static float _aspectRatio;
         static Vector3 _cameraLookAt;
+        static List<Mob> _mobs;
 
         public static Vector3 cameraPosition
         {
@@ -47,7 +49,17 @@ namespace ROTP.Utils
                 _cameraLookAt = value;
             }
         }
-    
-    
+
+        public static List<Mob> mobs
+        {
+            get
+            {
+                return _mobs;
+            }
+            set
+            {
+                _mobs = value;
+            }
+        }
     }
 }
