@@ -13,11 +13,32 @@ namespace ROTP.Scenes.Characters
         private Model mobModel;
         //Vector3 modelVelocity;
         Vector3 modelPosition;
+        Matrix modelRotation;
 
-        public Mob(Model mob)
+        public Mob(Model mob, int x, int y, int z)
         {
             mobModel = mob;
-            modelPosition = new Vector3(20, 5, 50);
+            modelPosition = new Vector3(x, y, z);
+            modelRotation = Matrix.CreateRotationY(3 * MathHelper.Pi / 2);
+        }
+
+        public void update(GameTime gameTime)
+        {
+            float time = gameTime.ElapsedGameTime.Milliseconds;
+            float x = 0;
+            float z = 0;
+            if (modelPosition.X < 50)
+            {
+                x = 2 * time / 100;
+                z = 0;
+            }
+            else
+            {
+                x = 0;
+                z = 2 * time / 100;
+                modelRotation = Matrix.CreateRotationY(2 * MathHelper.Pi);
+            }
+            modelPosition = new Vector3(modelPosition.X + x, modelPosition.Y, modelPosition.Z - z);
         }
 
         public void draw()
@@ -34,7 +55,7 @@ namespace ROTP.Scenes.Characters
                 foreach (BasicEffect effect in mesh.Effects)
                 {
                     effect.EnableDefaultLighting();
-                    effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateScale(0.003f);// *Matrix.CreateTranslation(modelPosition);
+                    effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateScale(0.003f) * modelRotation * Matrix.CreateTranslation(modelPosition);
                     effect.View = Matrix.CreateLookAt(GlobalsVar.cameraPosition, GlobalsVar.cameraLookAt, Vector3.Up);
                     effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), GlobalsVar.aspectRatio, 1.0f, 10000.0f);
                     //effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, GlobalsVar.aspectRatio, 10, 10000);

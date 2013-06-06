@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using ROTP.Scenes.Characters;
 using ROTP.Scenes.Menus;
+using ROTP.Utils;
 
 namespace ROTP.Scenes
 {
@@ -14,13 +15,12 @@ namespace ROTP.Scenes
         Background gameBackground;
         GameInterface gameInterface;
         public Dictionary<string, Model> meshModels;
-        List<Mob> mobs;
 
         public GameScene(SceneManager manager)
             : base(manager)
         {
             meshModels = new Dictionary<string, Model>();
-            mobs = new List<Mob>();
+            GlobalsVar.mobs = new List<Mob>();
         }
 
         protected override void LoadContent()
@@ -31,9 +31,10 @@ namespace ROTP.Scenes
             gameInterface.Load(SceneManager.Game.Content);
 
             meshModels.Add("testchar", SceneManager.Game.Content.Load<Model>("Models\\p1_wedge"));
-
+            
             //just a test erase it
-            mobs.Add(new Mob(meshModels["testchar"]));
+            GlobalsVar.mobs.Add(new Mob(meshModels["testchar"], 20, 5, -1));
+            GlobalsVar.mobs.Add(new Mob(meshModels["testchar"], 10, 5, -1));
         }
 
         protected override void UnloadContent()
@@ -48,6 +49,10 @@ namespace ROTP.Scenes
             if (IsActive)
             {
                 gameBackground.Update();
+                foreach (Mob mob in GlobalsVar.mobs)
+                {
+                    mob.update(gameTime);
+                }   
                 gameInterface.Update();
             }
         }
@@ -57,7 +62,7 @@ namespace ROTP.Scenes
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             gameBackground.Draw();
-            foreach (Mob mob in mobs)
+            foreach (Mob mob in GlobalsVar.mobs)
             {
                 mob.draw();
             }
