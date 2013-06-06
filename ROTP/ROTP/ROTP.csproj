@@ -116,6 +116,7 @@
     <Compile Include="Interface\TowerInformationsBox.cs" />
     <Compile Include="Save\Options.cs" />
     <Compile Include="Save\SaveManager.cs" />
+    <Compile Include="Scenes\Characters\Mob.cs" />
     <Compile Include="Scenes\Common\AchievementsMenu.cs" />
     <Compile Include="Scenes\Menus\Common\Menu.cs" />
     <Compile Include="Scenes\Menus\Common\MenuItem.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Scenes\GameScene.cs" />
     <Compile Include="Scenes\Menus\OptionsMenu.cs" />
     <Compile Include="Scenes\TestScene.cs" />
+    <Compile Include="Utils\GlobalsVar.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -167,6 +169,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

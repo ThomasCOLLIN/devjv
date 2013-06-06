@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using ROTP.Utils;
 
 namespace ROTP.Elements
 {
@@ -73,7 +74,7 @@ namespace ROTP.Elements
 
             DrawRoom();
 
-            viewMatrix = Matrix.CreateLookAt(cameraPosition, cameraLookAt, Vector3.Up);
+            viewMatrix = Matrix.CreateLookAt(GlobalsVar.cameraPosition, GlobalsVar.cameraLookAt, Vector3.Up);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
         }
 
@@ -87,8 +88,8 @@ namespace ROTP.Elements
         private void SetUpCamera()
         {
             //Init
-            cameraPosition = new Vector3(10, 2, -10);
-            cameraLookAt = new Vector3(0, 2, 0);
+            GlobalsVar.cameraPosition = new Vector3(20, 25, -30);
+            GlobalsVar.cameraLookAt = new Vector3(20, 0, 0);
 
         }
 
@@ -97,7 +98,7 @@ namespace ROTP.Elements
         /// </summary>
         private void UpdateCamera()
         {
-            Vector3 dir = cameraLookAt - cameraPosition;
+            Vector3 dir = GlobalsVar.cameraLookAt - GlobalsVar.cameraPosition;
             dir.Y = 0;
             dir.Normalize();
             dir /= 4; // Diminue la vitesse
@@ -109,58 +110,58 @@ namespace ROTP.Elements
             // Gauche - Droite
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                if (cameraPosition.X + dirN.X < floorPlan.GetLength(0) - 1 && cameraPosition.X + dirN.X > 1
-                    && -(cameraPosition.Z + dirN.Z) < floorPlan.GetLength(1) -1 && -(cameraPosition.Z + dirN.Z) > 1)
+                if (GlobalsVar.cameraPosition.X + dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dirN.X > 1
+                    && -(GlobalsVar.cameraPosition.Z + dirN.Z) < floorPlan.GetLength(1) -1 && -(GlobalsVar.cameraPosition.Z + dirN.Z) > 1)
                 {
-                    cameraPosition += dirN;
-                    cameraLookAt += dirN;
+                    GlobalsVar.cameraPosition += dirN;
+                    GlobalsVar.cameraLookAt += dirN;
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                if (cameraPosition.X - dirN.X < floorPlan.GetLength(0) - 1 && cameraPosition.X - dirN.X > 1
-                    && -(cameraPosition.Z - dirN.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - dirN.Z) > 1)
+                if (GlobalsVar.cameraPosition.X - dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dirN.X > 1
+                    && -(GlobalsVar.cameraPosition.Z - dirN.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z - dirN.Z) > 1)
                 {
-                    cameraPosition -= dirN;
-                    cameraLookAt -= dirN;
+                    GlobalsVar.cameraPosition -= dirN;
+                    GlobalsVar.cameraLookAt -= dirN;
                 }
             }
 
             // Travelling
             if (Mouse.GetState().ScrollWheelValue > mouseScrollValue)
             {
-                if (cameraPosition.X + (dir.X * 10) < floorPlan.GetLength(0) - 1 && cameraPosition.X + (dir.X * 10) > 1
-                    && -(cameraPosition.Z + (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z + (dir.Z * 10)) > 1)
+                if (GlobalsVar.cameraPosition.X + (dir.X * 10) < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + (dir.X * 10) > 1
+                    && -(GlobalsVar.cameraPosition.Z + (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z + (dir.Z * 10)) > 1)
                 {
-                    cameraPosition += dir * 10;
-                    cameraLookAt += dir * 10;
+                    GlobalsVar.cameraPosition += dir * 10;
+                    GlobalsVar.cameraLookAt += dir * 10;
                 }
             }
             if (Mouse.GetState().ScrollWheelValue < mouseScrollValue)
             {
-                if (cameraPosition.X - (dir.X * 10) < floorPlan.GetLength(0) - 1 && cameraPosition.X - (dir.X * 10) > 1
-                    && -(cameraPosition.Z - (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - (dir.Z * 10)) > 1)
+                if (GlobalsVar.cameraPosition.X - (dir.X * 10) < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - (dir.X * 10) > 1
+                    && -(GlobalsVar.cameraPosition.Z - (dir.Z * 10)) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z - (dir.Z * 10)) > 1)
                 {
-                    cameraPosition -= dir * 10;
-                    cameraLookAt -= dir * 10;
+                    GlobalsVar.cameraPosition -= dir * 10;
+                    GlobalsVar.cameraLookAt -= dir * 10;
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                if (cameraPosition.X + dir.X < floorPlan.GetLength(0) - 1 && cameraPosition.X + dir.X > 1
-                    && -(cameraPosition.Z + dir.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z + dir.Z) > 1)
+                if (GlobalsVar.cameraPosition.X + dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dir.X > 1
+                    && -(GlobalsVar.cameraPosition.Z + dir.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z + dir.Z) > 1)
                 {
-                    cameraPosition += dir;
-                    cameraLookAt += dir;
+                    GlobalsVar.cameraPosition += dir;
+                    GlobalsVar.cameraLookAt += dir;
                 }
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                if (cameraPosition.X - dir.X < floorPlan.GetLength(0) - 1 && cameraPosition.X - dir.X > 1
-                    && -(cameraPosition.Z - dir.Z) < floorPlan.GetLength(1) - 1 && -(cameraPosition.Z - dir.Z) > 1)
+                if (GlobalsVar.cameraPosition.X - dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dir.X > 1
+                    && -(GlobalsVar.cameraPosition.Z - dir.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z - dir.Z) > 1)
                 {
-                    cameraPosition -= dir;
-                    cameraLookAt -= dir;
+                    GlobalsVar.cameraPosition -= dir;
+                    GlobalsVar.cameraLookAt -= dir;
                 }
             }
             
@@ -169,23 +170,23 @@ namespace ROTP.Elements
             if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().X > mouseX)
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY(angle);
-                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraPosition - GlobalsVar.cameraLookAt, rotationMatrix);
 
-                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
-                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
+                if ((GlobalsVar.cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (GlobalsVar.cameraLookAt + transformedReference).X > 1
+                    && -(GlobalsVar.cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
                 {
-                    cameraPosition = cameraLookAt + transformedReference;
+                    GlobalsVar.cameraPosition = GlobalsVar.cameraLookAt + transformedReference;
                 }
             }
             if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().X < mouseX)
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY(-angle);
-                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraPosition - GlobalsVar.cameraLookAt, rotationMatrix);
 
-                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
-                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1)
+                if ((GlobalsVar.cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (GlobalsVar.cameraLookAt + transformedReference).X > 1
+                    && -(GlobalsVar.cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraLookAt + transformedReference).Z > 1)
                 {
-                    cameraPosition = cameraLookAt + transformedReference;
+                    GlobalsVar.cameraPosition = GlobalsVar.cameraLookAt + transformedReference;
                 }
             }
             if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().Y > mouseY)
@@ -193,13 +194,13 @@ namespace ROTP.Elements
                 Matrix rotationX = Matrix.CreateRotationX(-angle * dirN.X * 4);
                 Matrix rotationZ = Matrix.CreateRotationZ(-angle * dirN.Z * 4);
                 Matrix rotationMatrix = rotationX * rotationZ;
-                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraPosition - GlobalsVar.cameraLookAt, rotationMatrix);
 
-                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
-                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1
-                    && (cameraLookAt + transformedReference).Y > 0.05 && (cameraLookAt + transformedReference).Y < 21)
+                if ((GlobalsVar.cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (GlobalsVar.cameraLookAt + transformedReference).X > 1
+                    && -(GlobalsVar.cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraLookAt + transformedReference).Z > 1
+                    && (GlobalsVar.cameraLookAt + transformedReference).Y > 0.05 && (GlobalsVar.cameraLookAt + transformedReference).Y < 21)
                 {
-                    cameraPosition = cameraLookAt + transformedReference;
+                    GlobalsVar.cameraPosition = GlobalsVar.cameraLookAt + transformedReference;
                 }
             }
             if ((Mouse.GetState().RightButton == ButtonState.Pressed) && Mouse.GetState().Y < mouseY)
@@ -207,13 +208,13 @@ namespace ROTP.Elements
                 Matrix rotationX = Matrix.CreateRotationX(angle * dirN.X * 4);
                 Matrix rotationZ = Matrix.CreateRotationZ(angle * dirN.Z * 4);
                 Matrix rotationMatrix = rotationX * rotationZ;
-                Vector3 transformedReference = Vector3.Transform(cameraPosition - cameraLookAt, rotationMatrix);
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraPosition - GlobalsVar.cameraLookAt, rotationMatrix);
 
-                if ((cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (cameraLookAt + transformedReference).X > 1
-                    && -(cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(cameraLookAt + transformedReference).Z > 1
-                    && (cameraLookAt + transformedReference).Y > 0.05 && (cameraLookAt + transformedReference).Y < 21)
+                if ((GlobalsVar.cameraLookAt + transformedReference).X < floorPlan.GetLength(0) - 1 && (GlobalsVar.cameraLookAt + transformedReference).X > 1
+                    && -(GlobalsVar.cameraLookAt + transformedReference).Z < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraLookAt + transformedReference).Z > 1
+                    && (GlobalsVar.cameraLookAt + transformedReference).Y > 0.05 && (GlobalsVar.cameraLookAt + transformedReference).Y < 21)
                 {
-                    cameraPosition = cameraLookAt + transformedReference;
+                    GlobalsVar.cameraPosition = GlobalsVar.cameraLookAt + transformedReference;
                 }
             }
 
@@ -221,14 +222,14 @@ namespace ROTP.Elements
             if (Keyboard.GetState().IsKeyDown(Keys.A))
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY((float)0.01);
-                Vector3 transformedReference = Vector3.Transform(cameraLookAt - cameraPosition, rotationMatrix);
-                cameraLookAt = cameraPosition + transformedReference;
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraLookAt - GlobalsVar.cameraPosition, rotationMatrix);
+                GlobalsVar.cameraLookAt = GlobalsVar.cameraPosition + transformedReference;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Z))
             {
                 Matrix rotationMatrix = Matrix.CreateRotationY(-(float)0.01);
-                Vector3 transformedReference = Vector3.Transform(cameraLookAt - cameraPosition, rotationMatrix);
-                cameraLookAt = cameraPosition + transformedReference;
+                Vector3 transformedReference = Vector3.Transform(GlobalsVar.cameraLookAt - GlobalsVar.cameraPosition, rotationMatrix);
+                GlobalsVar.cameraLookAt = GlobalsVar.cameraPosition + transformedReference;
             }
         }
 
