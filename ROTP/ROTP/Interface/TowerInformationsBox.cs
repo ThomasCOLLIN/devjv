@@ -36,7 +36,7 @@ namespace ROTP.Interface
             if (_timer > DateTime.Now)
             {
                 sb.Begin();
-                sb.DrawString(_font, Text, _txtPos, Color.DeepPink);
+                sb.DrawString(_font, Text, _txtPos, Color.Black);
                 sb.End();
             }
         }

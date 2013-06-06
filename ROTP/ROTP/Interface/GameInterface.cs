@@ -22,26 +22,31 @@ namespace ROTP
         private List<TowerIcon> _towerIcons;
         private TowerInformationsBox _towerInformationBox;
 
+        private Texture2D _tempLifeButton;
+        private Vector2 _lifeButtonPosition = new Vector2(160, 650);
+        private Rectangle _lifeButtonBoundsRect;
+
+
         public GameInterface(GraphicsDevice device)
         {
             _screenHeight = device.Viewport.Height;
 
-            _lifeBar = new ResizeBar(new Vector2(0, 0), @"Textures\lifebar", width: 300, maxLife: 400, life: 400);
-            _waveBar = new ResizeBar(new Vector2(0, 50), @"Textures\wavebar", width: 300, maxLife: 300, life: 0);
+            _lifeBar = new ResizeBar(new Vector2(250, 650), @"Textures\lifebar", width: 300, maxLife: 400, life: 400);
+            _waveBar = new ResizeBar(new Vector2(250, 680), @"Textures\wavebar", width: 300, maxLife: 300, life: 0);
 
 
             _towerIcons = new List<TowerIcon>();
            
-            TowerIcon towerIcon = new TowerIcon(new Vector2(0, 120), @"Textures\eiffel-tower-icon");
+            TowerIcon towerIcon = new TowerIcon(new Vector2(10, 650), @"Textures\button-eiffel-tower");
             towerIcon.Text = "Toto\nThis is Sparta !";
             _towerIcons.Add(towerIcon);
 
 
-            towerIcon = new TowerIcon(new Vector2(50, 120), @"Textures\eiffel-tower-icon");
+            towerIcon = new TowerIcon(new Vector2(60, 650), @"Textures\button-eiffel-tower");
             towerIcon.Text = "Titi";
             _towerIcons.Add(towerIcon);
 
-            towerIcon = new TowerIcon(new Vector2(100, 120), @"Textures\eiffel-tower-icon");
+            towerIcon = new TowerIcon(new Vector2(110, 650), @"Textures\button-eiffel-tower");
             towerIcon.Text = "Tata";
             _towerIcons.Add(towerIcon);
 
@@ -60,7 +65,10 @@ namespace ROTP
                 towerIcon.Load(content);    
             }
 
-            _towerInformationBox.Load(content, new Vector2(0, 200));
+            _towerInformationBox.Load(content, new Vector2(700, 650));
+
+            _tempLifeButton = content.Load<Texture2D>(@"Textures\button-eiffel-tower");
+            _lifeButtonBoundsRect = new Rectangle((Int32)_lifeButtonPosition.X, (Int32)_lifeButtonPosition.Y, 45, 45);
 
         }
 
@@ -70,16 +78,8 @@ namespace ROTP
 
         public void HandleInput()
         {
-            _interfaceBoundsRect = new Rectangle((Int32)_interfacePosition.X, (Int32)_interfacePosition.Y, _interfaceTexture.Width, _interfaceTexture.Height);
+            _interfaceBoundsRect = new Rectangle((Int32)_interfacePosition.X, (Int32)_interfacePosition.Y, _interfaceTexture.Width, _interfaceTexture.Height);          
 
-            //if (ToolsInterface.isMouseLeftPressed())
-            //{
-            //    if (ToolsInterface.isMouseIntersects(_interfacePosition, _interfaceBoundsRect))
-            //    {
-            //        _lifeBar.ChangeLife(-1);
-            //        _waveBar.ChangeLife(1);
-            //    }
-            //}
             foreach (var towerIcon in _towerIcons)
             {
                 if (towerIcon.IsSelected())
@@ -87,6 +87,15 @@ namespace ROTP
                     _towerInformationBox.Display();
                     _towerInformationBox.Text = towerIcon.Text;
                     break;
+                }
+            }
+
+            if (ToolsInterface.isMouseLeftPressed())
+            {
+                if (ToolsInterface.isMouseIntersects(_lifeButtonPosition, _lifeButtonBoundsRect))
+                {
+                    _lifeBar.ChangeLife(-1);
+                    _waveBar.ChangeLife(1);
                 }
             }
         }
@@ -107,6 +116,12 @@ namespace ROTP
                 towerIcon.Draw(spriteBatch);    
             }
             _towerInformationBox.Draw(spriteBatch);
+
+
+            Rectangle displayRect = new Rectangle((Int32)_lifeButtonPosition.X, (Int32)_lifeButtonPosition.Y, 45, 45);
+            spriteBatch.Begin();
+            spriteBatch.Draw(_tempLifeButton, displayRect, Color.White);
+            spriteBatch.End();
         }
 
     #region private
