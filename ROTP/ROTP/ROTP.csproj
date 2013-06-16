@@ -108,6 +108,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Elements\Background.cs" />
+    <Compile Include="Input\Input.cs" />
+    <Compile Include="Input\MenuInput.cs" />
     <Compile Include="Interface\GameInterface.cs" />
     <Compile Include="Interface\ToolsInterface.cs" />
     <Compile Include="Interface\ResizeBar.cs" />

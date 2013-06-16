@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using ROTP.Scenes.Common;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
+using ROTP.Input;
 
 namespace ROTP.Scenes.Menus.Common
 {
@@ -13,23 +14,10 @@ namespace ROTP.Scenes.Menus.Common
         private List<MenuItem> _menuItems;
         private string _menuTitle;
 
-        private KeyboardState _keyboardstate;
-        private KeyboardState _previousKeyboardState;
-
         protected List<MenuItem> MenuItems
         {
             get { return _menuItems; }
             set { _menuItems = value; }
-        }
-
-        protected KeyboardState Keyboardstate
-        {
-            get { return _keyboardstate; }
-        }
-
-        protected KeyboardState PreviousKeyboardState
-        {
-            get { return _previousKeyboardState; }
         }
 
         public Menu(SceneManager manager, string title)
@@ -40,9 +28,6 @@ namespace ROTP.Scenes.Menus.Common
 
             TransitionOnTime = TimeSpan.FromSeconds(1);
             TransitionOffTime = TimeSpan.FromSeconds(1);
-
-            _keyboardstate = new KeyboardState();
-            _previousKeyboardState = new KeyboardState();
         }
 
         protected override void LoadContent()
@@ -53,26 +38,18 @@ namespace ROTP.Scenes.Menus.Common
         {
         }
 
-        public override void Update(GameTime gameTime, bool otherSceneHasFocus, bool coveredByOtherScene)
-        {
-            base.Update(gameTime, otherSceneHasFocus, coveredByOtherScene);
-
-            _previousKeyboardState = _keyboardstate;
-            _keyboardstate = Keyboard.GetState();
-        }
-
         public override void HandleInput()
         {
-            if (IsKeyNowPressed(Keys.Up))
+            if (MenuInput.IsUpPressed())
                 _selectedIndex = --_selectedIndex < 0 ? _menuItems.Count - 1 : _selectedIndex;
 
-            if (IsKeyNowPressed(Keys.Down))
+            if (MenuInput.IsDownPressed())
                 _selectedIndex = ++_selectedIndex >= _menuItems.Count ? 0 : _selectedIndex;
 
-            if (IsKeyNowPressed(Keys.Enter))
+            if (MenuInput.IsSelectPressed())
                 OnSelect();
 
-            if (IsKeyNowPressed(Keys.Escape) || IsKeyNowPressed(Keys.Back))
+            if (MenuInput.IsCancelPressed())
                 OnCancel();
         }
 
@@ -120,12 +97,6 @@ namespace ROTP.Scenes.Menus.Common
         {
             if (_selectedIndex >= 0 && _selectedIndex < _menuItems.Count)
                 _menuItems[_selectedIndex].OnItemSelected();
-        }
-
-        protected bool IsKeyNowPressed(Keys key)
-        {
-            return _keyboardstate.IsKeyDown(key)
-                && _previousKeyboardState.IsKeyUp(key);
         }
     }
 }

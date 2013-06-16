@@ -27,14 +27,6 @@ namespace ROTP.Scenes.Menus
             MenuItems.Add(exit);
         }
 
-        public override void HandleInput()
-        {
-            base.HandleInput();
-
-            if (IsKeyNowPressed(Keys.Right))
-                OnSelect();
-        }
-
         public override void OnCancel()
         {
             SceneManager.Game.Exit();

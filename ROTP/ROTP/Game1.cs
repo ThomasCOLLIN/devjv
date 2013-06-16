@@ -3,6 +3,7 @@ using ROTP.Scenes.Common;
 using ROTP.Scenes.Menus;
 using ROTP.Scenes;
 using ROTP.Save;
+using ROTP.Input;
 
 namespace ROTP
 {
@@ -46,6 +47,7 @@ namespace ROTP
 
             SceneManager manager = new SceneManager(this);
 
+            Components.Add(new MenuInput(this));
             Components.Add(manager);
 
             new MainMenu(manager).Add();
