@@ -4,6 +4,7 @@ using ROTP.Scenes.Menus;
 using ROTP.Scenes;
 using ROTP.Save;
 using ROTP.Input;
+using ROTP.Options;
 
 namespace ROTP
 {
@@ -19,17 +20,17 @@ namespace ROTP
             get { return Game1._graphics; }
         }
 
-        private static Options _options = null;
+        private static RotpOptions _RotpOptions = null;
 
-        public static Options Options
+        public static RotpOptions RotpOptions
         {
             get
             {
-                if (_options == null)
-                    _options = SaveManager.LoadOptions();
-                return Game1._options;
+                if (_RotpOptions == null)
+                    _RotpOptions = SaveManager.LoadOptions();
+                return Game1._RotpOptions;
             }
-            set { Game1._options = value; }
+            set { Game1._RotpOptions = value; }
         }
 
         public Game1()
@@ -38,9 +39,9 @@ namespace ROTP
 
             _graphics = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferHeight = (int) Game1.Options.Resolution.Y,
-                PreferredBackBufferWidth = (int) Game1.Options.Resolution.X,
-                IsFullScreen = Game1.Options.IsFullScreen
+                PreferredBackBufferHeight = (int) Game1.RotpOptions.Resolution.Y,
+                PreferredBackBufferWidth = (int) Game1.RotpOptions.Resolution.X,
+                IsFullScreen = Game1.RotpOptions.IsFullScreen
             };
            
             Content.RootDirectory = "Content";

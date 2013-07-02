@@ -4,12 +4,13 @@ using System;
 using Microsoft.Xna.Framework;
 using ROTP.Save;
 using System.Diagnostics;
+using ROTP.Options;
 
 namespace ROTP.Scenes.Menus
 {
     class OptionsMenu : Menu
     {
-        private Options _options;
+        private RotpOptions _options;
 
         private MenuItem _fs;
         private MenuItem _bgm;
@@ -18,7 +19,7 @@ namespace ROTP.Scenes.Menus
         public OptionsMenu(SceneManager manager)
             : base(manager, "Options")
         {
-            _options = Game1.Options;
+            _options = Game1.RotpOptions;
 
             _bgm = new MenuItem("");
             _bgm.Selected += OnBgmSelected;

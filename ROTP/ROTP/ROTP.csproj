@@ -107,6 +107,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Achievements\ChangeOptionsAchievement.cs" />
+    <Compile Include="Achievements\Common\Achievement.cs" />
+    <Compile Include="Achievements\Common\AchievementManager.cs" />
     <Compile Include="Elements\Background.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\MenuInput.cs" />
@@ -116,9 +119,9 @@
     <Compile Include="Interface\TowerIcon.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Interface\TowerInformationsBox.cs" />
-    <Compile Include="Save\Options.cs" />
+    <Compile Include="Options\RotpOptions.cs" />
     <Compile Include="Save\SaveManager.cs" />
-    <Compile Include="Scenes\Common\AchievementsMenu.cs" />
+    <Compile Include="Scenes\Menus\AchievementsMenu.cs" />
     <Compile Include="Scenes\Menus\Common\Menu.cs" />
     <Compile Include="Scenes\Menus\Common\MenuItem.cs" />
     <Compile Include="Scenes\Menus\MainMenu.cs" />

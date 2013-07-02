@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace ROTP.Save
+namespace ROTP.Options
 {
     [Serializable]
-    public class Options
+    public class RotpOptions
     {
         private bool _isFullScreen;
         private Vector2 _resolution;
