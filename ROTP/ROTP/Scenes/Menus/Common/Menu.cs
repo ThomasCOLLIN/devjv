@@ -57,21 +57,25 @@ namespace ROTP.Scenes.Menus.Common
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            Vector2 origin = new Vector2();
+
             SceneManager.SpriteBatch.Begin();
             var transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            var titlePosition = new Vector2(GraphicsDevice.Viewport.Width / 2f, 80);
-            Vector2 titleOrigin = SceneManager.Font.MeasureString(_menuTitle) / 2;
+            var titlePosition = new Vector2(GraphicsDevice.Viewport.Width / 6f, 80);
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             titlePosition.X -= transitionOffset * 100;
-            SceneManager.SpriteBatch.DrawString(SceneManager.Font, _menuTitle, titlePosition, titleColor, 0, titleOrigin, 1, SpriteEffects.None, 0);
+            SceneManager.SpriteBatch.DrawString(SceneManager.Font, _menuTitle, titlePosition, titleColor, 0, origin, 1, SpriteEffects.None, 0);
 
-
+            Vector2 itemPosition = new Vector2(GraphicsDevice.Viewport.Width / 6f, Math.Max(GraphicsDevice.Viewport.Height / 3f, 90));
+            Vector2 itemSize = SceneManager.Font.MeasureString(_menuTitle);
+            itemPosition.Y -= itemSize.Y / 2f;
             for (int i = 0; i < _menuItems.Count; i++)
             {
+                itemPosition.X -= transitionOffset * 200;
                 MenuItem item = _menuItems[i];
                 Color color = i == _selectedIndex ? Color.Black : Color.White;
-                titlePosition.Y += 20;
-                SceneManager.SpriteBatch.DrawString(SceneManager.Font, item.Text, titlePosition, color, 0, titleOrigin, 1, SpriteEffects.None, 0);
+                SceneManager.SpriteBatch.DrawString(SceneManager.Font, item.Text, itemPosition, color, 0, origin, 1, SpriteEffects.None, 0);
+                itemPosition.Y += itemSize.Y;
             }
             SceneManager.SpriteBatch.End();
 
