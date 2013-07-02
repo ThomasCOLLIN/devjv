@@ -111,6 +111,7 @@
     <Compile Include="Achievements\Common\Achievement.cs" />
     <Compile Include="Achievements\Common\AchievementManager.cs" />
     <Compile Include="Achievements\ChangeOptionsALotAchievement.cs" />
+    <Compile Include="Achievements\FiveVictoryAchievement.cs" />
     <Compile Include="Elements\Background.cs" />
     <Compile Include="Input\Input.cs" />
     <Compile Include="Input\MenuInput.cs" />
