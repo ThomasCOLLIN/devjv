@@ -8,11 +8,19 @@ using ROTP.Save;
 namespace ROTP.Achievements
 {
     [Serializable]
-    public class ChangeOptionsAchievement : Achievement
+    public class ChangeOptionsALotAchievement : Achievement
     {
-        public ChangeOptionsAchievement()
-            : base("Changeur d'options",
-                   "Tu as changé la configuration du jeu!!!!",
+        private int times;
+
+        public int Times
+        {
+            get { return times; }
+            set { times = value; }
+        }
+
+        public ChangeOptionsALotAchievement()
+            : base("Changeur d'options fou",
+                   "Tu as changé la configuration du jeu cinq fois!!!!",
                    "")
         {
             SaveManager.OptionsChanged += onEvent;
@@ -22,7 +30,8 @@ namespace ROTP.Achievements
         {
             if (!IsOwned)
             {
-                IsOwned = true;
+                if (++times >= 5)
+                    IsOwned = true;
                 saveAchievement();
             }
         }

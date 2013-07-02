@@ -36,7 +36,8 @@ namespace ROTP
         public Game1()
         {
             Window.Title = "Rise of the Pony - Pony Stark vs Etramel";
-
+            
+            Achievements.Common.AchievementManager.Load();
             _graphics = new GraphicsDeviceManager(this)
             {
                 PreferredBackBufferHeight = (int) Game1.RotpOptions.Resolution.Y,

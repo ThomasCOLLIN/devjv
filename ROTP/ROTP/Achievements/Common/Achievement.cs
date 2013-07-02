@@ -10,6 +10,7 @@ namespace ROTP.Achievements.Common
 {
     [Serializable]
     [XmlInclude(typeof(ChangeOptionsAchievement))]
+    [XmlInclude(typeof(ChangeOptionsALotAchievement))]
     public abstract class Achievement
     {
         private bool isOwned = false;
@@ -17,28 +18,25 @@ namespace ROTP.Achievements.Common
         private string description = "";
         private string imagePath = "";
 
-        [XmlElement]
         public string Name
         {
             get { return name; }
         }
 
-        [XmlElement]
         public string Description
         {
             get { return description; }
         }
 
-        [XmlElement]
         public string ImagePath
         {
             get { return imagePath; }
         }
 
-        [XmlElement]
         public bool IsOwned
         {
             get { return isOwned; }
+            set { isOwned = value; }
         }
 
         public Achievement(string name, string description, string imagePath)
@@ -48,12 +46,11 @@ namespace ROTP.Achievements.Common
             this.imagePath = imagePath;
         }
 
-        protected void validateAchievement()
+        protected void saveAchievement()
         {
-            isOwned = true;
             SaveManager.SaveAchievements(AchievementManager.Instance.GetAll());
         }
 
-        public abstract void onEvent(object sender, EventArgs args);
+        protected abstract void onEvent(object sender, EventArgs args);
     }
 }

@@ -15,6 +15,16 @@ namespace ROTP.Save
         private static readonly string optionPath = "options.sav";
         private static readonly string achievementsPath = "achievements.sav";
 
+        #region event OptionChanged handler
+        public static event EventHandler OptionsChanged;
+
+        private static void onOptionsChanged()
+        {
+            if (OptionsChanged != null)
+                OptionsChanged(null, new EventArgs());
+        }
+        #endregion
+
         #region achievements
         public static bool SaveAchievements(List<Achievement> achievements)
         {
@@ -23,7 +33,7 @@ namespace ROTP.Save
 
         public static List<Achievement> LoadAchievements()
         {
-            List<Achievement> achievs = (List<Achievement>)Load(achievementsPath);
+            List<Achievement> achievs = (List<Achievement>)Load(achievementsPath, typeof(List<Achievement>));
 
             if (achievs == null)
                 achievs = AchievementManager.GetEmptyAchievementList();
@@ -35,13 +45,13 @@ namespace ROTP.Save
         #region options
         public static bool SaveOptions(RotpOptions options)
         {
-            AchievementManager.Instance.GetAchievement(typeof(ChangeOptionsAchievement)).onEvent(null, new EventArgs());
+            onOptionsChanged();
             return Save(optionPath, options);
         }
 
         public static RotpOptions LoadOptions()
         {
-            RotpOptions options = (RotpOptions) Load(optionPath);
+            RotpOptions options = (RotpOptions) Load(optionPath, typeof(RotpOptions));
 
             if (options == null)
             {
@@ -79,14 +89,14 @@ namespace ROTP.Save
             }
         }
 
-        private static object Load(string path)
+        private static object Load(string path, Type type)
         {
             FileStream file = null;
 
             try
             {
                 file = File.Open(path, FileMode.Open);
-                XmlSerializer serializer = new XmlSerializer(typeof(RotpOptions));
+                XmlSerializer serializer = new XmlSerializer(type);
                 object obj = serializer.Deserialize(file);
                 file.Close();
 
