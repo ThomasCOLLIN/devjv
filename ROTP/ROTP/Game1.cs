@@ -52,6 +52,7 @@ namespace ROTP
             Components.Add(new MenuInput(this));
             Components.Add(manager);
 
+            new BackgroundScene(manager).Add();
             new MainMenu(manager).Add();
         }
     }

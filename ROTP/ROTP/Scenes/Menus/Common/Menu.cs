@@ -55,41 +55,28 @@ namespace ROTP.Scenes.Menus.Common
 
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             Vector2 origin = new Vector2();
 
+            float posx = GraphicsDevice.Viewport.Width / 6f;
             SceneManager.SpriteBatch.Begin();
             var transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            var titlePosition = new Vector2(GraphicsDevice.Viewport.Width / 6f, 80);
+            var titlePosition = new Vector2(posx, 80);
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             titlePosition.X -= transitionOffset * 100;
             SceneManager.SpriteBatch.DrawString(SceneManager.Font, _menuTitle, titlePosition, titleColor, 0, origin, 1, SpriteEffects.None, 0);
 
-            Vector2 itemPosition = new Vector2(GraphicsDevice.Viewport.Width / 6f, Math.Max(GraphicsDevice.Viewport.Height / 3f, 90));
+            Vector2 itemPosition = new Vector2(posx, Math.Max(GraphicsDevice.Viewport.Height / 3f, 90));
             Vector2 itemSize = SceneManager.Font.MeasureString(_menuTitle);
             itemPosition.Y -= itemSize.Y / 2f;
             for (int i = 0; i < _menuItems.Count; i++)
             {
-                itemPosition.X -= transitionOffset * 200;
                 MenuItem item = _menuItems[i];
                 Color color = i == _selectedIndex ? Color.Black : Color.White;
+                itemPosition.X -= transitionOffset * (posx + SceneManager.Font.MeasureString(item.Text).X);
                 SceneManager.SpriteBatch.DrawString(SceneManager.Font, item.Text, itemPosition, color, 0, origin, 1, SpriteEffects.None, 0);
                 itemPosition.Y += itemSize.Y;
             }
             SceneManager.SpriteBatch.End();
-
-            if (TransitionPosition > 0)
-            {
-                // de base transparent vers noir utiliser (1f - TransitionAlpha) -> noir vers transparent
-                SceneManager.FadeBackBufferToBlack(1f - TransitionAlpha);
-
-                // see http://blogs.msdn.com/b/shawnhar/archive/2010/06/18/spritebatch-and-renderstates-in-xna-game-studio-4-0.aspx
-                GraphicsDevice.BlendState = BlendState.Opaque;
-                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                GraphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
-
-            }
         }
 
         public virtual void OnCancel()

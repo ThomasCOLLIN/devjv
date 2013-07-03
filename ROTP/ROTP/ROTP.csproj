@@ -123,6 +123,7 @@
     <Compile Include="Interface\TowerInformationsBox.cs" />
     <Compile Include="Options\RotpOptions.cs" />
     <Compile Include="Save\SaveManager.cs" />
+    <Compile Include="Scenes\BackgroundScene.cs" />
     <Compile Include="Scenes\Menus\AchievementsMenu.cs" />
     <Compile Include="Scenes\Menus\Common\Menu.cs" />
     <Compile Include="Scenes\Menus\Common\MenuItem.cs" />
