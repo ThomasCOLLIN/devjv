@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ROTP.Input
 {
-    class MenuInput : Input
+    class MenuInput : Common.Input
     {
         public MenuInput(Game game)
             : base(game)

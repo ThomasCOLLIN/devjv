@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace ROTP.Input
+namespace ROTP.Common
 {
     class Input : GameComponent
     {
