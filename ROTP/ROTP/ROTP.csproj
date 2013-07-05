@@ -141,6 +141,7 @@
     <Compile Include="Scenes\Menus\OptionsMenu.cs" />
     <Compile Include="Scenes\Characters\Mob.cs" />
     <Compile Include="Scenes\TestScene.cs" />
+    <Compile Include="Utils\Camera.cs" />
     <Compile Include="Utils\GlobalsVar.cs" />
   </ItemGroup>
   <ItemGroup>

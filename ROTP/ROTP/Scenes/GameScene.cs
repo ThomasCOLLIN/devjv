@@ -27,31 +27,18 @@ namespace ROTP.Scenes
 
         protected override void LoadContent()
         {
+            GlobalsVar.Camera = new Camera(SceneManager.GraphicsDevice.Viewport);
             gameBackground = new Background(SceneManager.GraphicsDevice);
             gameBackground.LoadContent(SceneManager.Game.Content);
             gameInterface = new GameInterface(SceneManager.GraphicsDevice);
             gameInterface.Load(SceneManager.Game.Content);
-
+            
             GlobalsVar.Map = new Map();
             GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>("Models\\p1_wedge"));
             GlobalsVar.MeshModels.Add("grassGround", SceneManager.Game.Content.Load<Model>("Models\\GrassSquare"));
 
-//            testCase = new MapCase(GlobalsVar.MeshModels["grassGround"], 10, 10, 0, 5, 5, 0.098f);
-
             GlobalsVar.Map.Generate(10, 10, "grass");
-            //just a test erase it
-
-            //GlobalsVar.mobs.Add(new Mob(GlobalsVar.MeshModels["grassGround"], 10f, 5, 0));
-            //GlobalsVar.mobs.Add(new Mob(GlobalsVar.MeshModels["grassGround"], 5f, 0, 0));
-            //GlobalsVar.mobs.Add(new Mob(GlobalsVar.MeshModels["grassGround"], 0, 0, 0));
-            //GlobalsVar.mobs.Add(new Mob(meshModels["grassGround"], 0f, 5, 0));
-            //GlobalsVar.mobs.Add(new Mob(meshModels["grassGround"], 0f, 10, 0));
-
-            //GlobalsVar.mobs.Add(new Mob(GlobalsVar.MeshModels["grassGround"], 1f, 1f, 0));
-            /*GlobalsVar.mobs.Add(new Mob(meshModels["grassGround"], 5f, 5, 0));
-            GlobalsVar.mobs.Add(new Mob(meshModels["grassGround"], -5f, -5, 0));
-            GlobalsVar.mobs.Add(new Mob(meshModels["grassGround"], -10f, -10, 0));
-        */}
+        }
 
         protected override void UnloadContent()
         {
@@ -63,6 +50,7 @@ namespace ROTP.Scenes
         public override void Update(GameTime gameTime, bool otherSceneHasFocus, bool coveredByOtherScene)
         {
             base.Update(gameTime, otherSceneHasFocus, coveredByOtherScene);
+            GlobalsVar.Camera.Update();
 
             if (IsActive)
             {

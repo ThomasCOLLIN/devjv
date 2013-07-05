@@ -11,12 +11,16 @@ namespace ROTP.Utils
 {
     class GlobalsVar
     {
-        static Vector3 _cameraPosition;
-        static float _aspectRatio;
-        static Vector3 _cameraLookAt;
         static List<Mob> _mobs;
         static Dictionary<string, Model> meshModels;
         static Map map;
+        static Camera camera;
+
+        internal static Camera Camera
+        {
+            get { return GlobalsVar.camera; }
+            set { GlobalsVar.camera = value; }
+        }
 
         public static Map Map
         {
@@ -28,42 +32,6 @@ namespace ROTP.Utils
         {
             get { return GlobalsVar.meshModels; }
             set { GlobalsVar.meshModels = value; }
-        }
-
-        public static Vector3 cameraPosition
-        {
-            get
-            {
-                return _cameraPosition;
-            }
-            set
-            {
-                _cameraPosition = value;
-            }
-        }
-
-        public static float aspectRatio
-        {
-            get
-            {
-                return _aspectRatio;
-            }
-            set
-            {
-                _aspectRatio = value;
-            }
-        }
-
-        public static Vector3 cameraLookAt
-        {
-            get
-            {
-                return _cameraLookAt;
-            }
-            set
-            {
-                _cameraLookAt = value;
-            }
         }
 
         public static List<Mob> mobs

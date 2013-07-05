@@ -73,8 +73,8 @@ namespace ROTP.Elements
                 {
                     effect.EnableDefaultLighting();
                     effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateScale(ratio) * modelRotation * Matrix.CreateTranslation(modelPosition);
-                    effect.View = Matrix.CreateLookAt(GlobalsVar.cameraPosition, GlobalsVar.cameraLookAt, Vector3.Up);
-                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), GlobalsVar.aspectRatio, 1.0f, 1000.0f);
+                    effect.View = Matrix.CreateLookAt(GlobalsVar.Camera.Position, GlobalsVar.Camera.LookAt, Vector3.Up);
+                    effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), GlobalsVar.Camera.AspectRatio, 1.0f, 1000.0f);
                 }
 
                 mesh.Draw();
