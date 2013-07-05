@@ -41,7 +41,7 @@ namespace ROTP.Elements
         public Background(GraphicsDevice device)
         {
             _device = device;
-            GlobalsVar.aspectRatio = device.Viewport.AspectRatio;
+            //GlobalsVar.aspectRatio = device.Viewport.AspectRatio;
         }
 
         public void LoadContent(ContentManager content)

@@ -19,6 +19,17 @@ namespace ROTP.Elements
         private string type;
 
         #region getters
+
+        public Vector3 ModelPosition
+        {
+            get { return modelPosition; }
+            set { modelPosition = value; }
+        }
+        public Model MapModel
+        {
+            get { return mapModel; }
+            set { mapModel = value; }
+        }
         public float SizeX
         {
           get { return sizeX; }

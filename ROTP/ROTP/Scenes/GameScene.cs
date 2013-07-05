@@ -70,18 +70,63 @@ namespace ROTP.Scenes
         public void CheckMouse()
         {
             MouseState mouseState = Mouse.GetState();
-            int mouseX = mouseState.X;
-            int mouseY = mouseState.Y;
 
-            //Console.WriteLine("Mouse state : " + mouseState.X + "X." + mouseState.Y + "Y");
+            if (mouseState.LeftButton == ButtonState.Pressed)
+            {
+                Console.WriteLine("He clicked with left mouse button !");
 
-            /*Vector3 nearsource = new Vector3((float)mouseX, (float)mouseY, 0f);
-            Vector3 farsource = new Vector3((float)mouseX, (float)mouseY, 1f);
-            Matrix world = Matrix.CreateTranslation(0, 0, 0);
+                int mouseX = mouseState.X;
+                int mouseY = mouseState.Y;
 
-            Vector3 nearPoint = graphics.GraphicsDevice.Viewport.Unproject(nearsource, proj, view, world);
+                //Console.WriteLine("Mouse state : " + mouseState.X + "X." + mouseState.Y + "Y");
 
-            Vector3 farPoint = graphics.GraphicsDevice.Viewport.Unproject(farsource, proj, view, world);*/
+                Vector3 nearsource = new Vector3((float)mouseX, (float)mouseY, 0f);
+                Vector3 farsource = new Vector3((float)mouseX, (float)mouseY, 1f);
+                
+                Matrix world = Matrix.CreateTranslation(0, 0, 0);
+                //Matrix world = Matrix.Identity;
+                
+                Vector3 nearPoint = SceneManager.GraphicsDevice.Viewport.Unproject(nearsource, GlobalsVar.Camera.ProjectionMatrix, GlobalsVar.Camera.ViewMatrix, world);
+                Vector3 farPoint = SceneManager.GraphicsDevice.Viewport.Unproject(farsource, GlobalsVar.Camera.ProjectionMatrix, GlobalsVar.Camera.ViewMatrix, world);
+
+                Vector3 direction = farPoint - nearPoint;
+                direction.Normalize();
+                Ray pickRay = new Ray(nearPoint, direction);
+
+                float selectedDistance = float.MaxValue;
+                MapCase res = null;
+
+                foreach (List<MapCase> listCase in GlobalsVar.Map.MapArray)
+                {
+                    foreach (MapCase mapcase in listCase)
+                    {
+                        foreach (ModelMesh mesh in mapcase.MapModel.Meshes)
+                        {
+                            BoundingSphere sphere = mesh.BoundingSphere.Transform(Matrix.CreateScale(mapcase.Ratio) * Matrix.CreateTranslation(mapcase.ModelPosition));
+                            //sphere.Center = new Vector3(mapcase.ModelPosition.X, mapcase.ModelPosition.Y, mapcase.ModelPosition.Z);
+                            Nullable<float> result = pickRay.Intersects(sphere);
+                            if (result.HasValue)
+                            {
+                                //Console.WriteLine("For item at " + mapcase.ModelPosition.X / 5 + " " + mapcase.ModelPosition.Y / 5 + " Distance is " + result.Value);
+                                if (result.Value < selectedDistance)
+                                {
+                                    selectedDistance = result.Value;
+                                    res = mapcase;
+                                }
+                            }
+                            else
+                            {
+                                //Console.WriteLine("Is null at " + mapcase.ModelPosition.X / 5 + " " + mapcase.ModelPosition.Y / 5);
+                            }
+
+                            if (res != null)
+                                Console.WriteLine("You cliked on item that is in coordinates : " + res.ModelPosition.X / 5 + " " + res.ModelPosition.Y / 5);
+                        }
+                    }
+                }
+            }
+
+
         }
 
         public override void Draw(GameTime gameTime)
