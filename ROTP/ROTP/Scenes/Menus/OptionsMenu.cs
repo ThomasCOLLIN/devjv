@@ -16,13 +16,39 @@ namespace ROTP.Scenes.Menus
         private MenuItem _bgm;
         private MenuItem _sound;
 
-        public static event EventHandler SoundOptionChanged;
-        public static event EventHandler MusicOptionChanged;
-        public static event EventHandler FullScreenOptionChanged;
+        #region events
+        public event EventHandler SoundOptionChanged;
+        public event EventHandler MusicOptionChanged;
+        public event EventHandler FullScreenOptionChanged;
+
+        private void InitHandlers()
+        {
+        }
+
+        public void OnSoundChange()
+        {
+            if (SoundOptionChanged != null)
+                SoundOptionChanged(this, new EventArgs());
+        }
+
+        public void OnMusicChange()
+        {
+            if (MusicOptionChanged != null)
+                MusicOptionChanged(this, new EventArgs());
+        }
+
+        public void OnFullScreenChange()
+        {
+            if (FullScreenOptionChanged != null)
+                FullScreenOptionChanged(this, new EventArgs());
+        }
+
+        #endregion
 
         public OptionsMenu(SceneManager manager)
             : base(manager, "Options")
         {
+            InitHandlers();
             _options = Game1.RotpOptions;
 
             _bgm = new MenuItem("");
@@ -55,16 +81,19 @@ namespace ROTP.Scenes.Menus
         {
             Game1.Graphics.ToggleFullScreen();
             _options.IsFullScreen = Game1.Graphics.IsFullScreen;
+            OnFullScreenChange();
         }
 
         private void OnBgmSelected(object sender, EventArgs args)
         {
             _options.IsBgmOn = !_options.IsBgmOn;
+            OnMusicChange();
         }
 
         private void OnSoundSelected(object sender, EventArgs args)
         {
             _options.IsSoundOn = !_options.IsSoundOn;
+            OnFullScreenChange();
         }
 
         private void OnOkSelected(object sender, EventArgs args)
