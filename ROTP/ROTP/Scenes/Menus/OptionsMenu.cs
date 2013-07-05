@@ -16,6 +16,10 @@ namespace ROTP.Scenes.Menus
         private MenuItem _bgm;
         private MenuItem _sound;
 
+        public static event EventHandler SoundOptionChanged;
+        public static event EventHandler MusicOptionChanged;
+        public static event EventHandler FullScreenOptionChanged;
+
         public OptionsMenu(SceneManager manager)
             : base(manager, "Options")
         {

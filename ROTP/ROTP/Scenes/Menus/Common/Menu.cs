@@ -14,6 +14,19 @@ namespace ROTP.Scenes.Menus.Common
         private List<MenuItem> _menuItems;
         private string _menuTitle;
 
+        private static SpriteFont _titleFont = null;
+
+        private static SpriteFont _itemFont = null;
+
+        public static SpriteFont ItemFont
+        {
+            get { return Menu._itemFont; }
+        }
+
+        public static SpriteFont TitleFont
+        {
+            get { return Menu._titleFont; }
+        }
         protected List<MenuItem> MenuItems
         {
             get { return _menuItems; }
@@ -32,10 +45,23 @@ namespace ROTP.Scenes.Menus.Common
 
         protected override void LoadContent()
         {
+            if (_titleFont == null)
+                _titleFont = SceneManager.Game.Content.Load<SpriteFont>("Texts/MenuTitle");
+            if (_itemFont == null)
+                _itemFont = SceneManager.Game.Content.Load<SpriteFont>("Texts/MenuItem");
         }
 
         protected override void UnloadContent()
         {
+        }
+
+        public override void Update(GameTime gameTime, bool otherSceneHasFocus, bool coveredByOtherScene)
+        {
+            base.Update(gameTime, otherSceneHasFocus, coveredByOtherScene);
+
+            for (int i = 0; i < _menuItems.Count; i++)
+                _menuItems[i].Update(gameTime, IsActive && (i == _selectedIndex));
+
         }
 
         public override void HandleInput()
@@ -63,19 +89,15 @@ namespace ROTP.Scenes.Menus.Common
             var titlePosition = new Vector2(posx, 80);
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             titlePosition.X -= transitionOffset * 100;
-            SceneManager.SpriteBatch.DrawString(SceneManager.Font, _menuTitle, titlePosition, titleColor, 0, origin, 1, SpriteEffects.None, 0);
+            SceneManager.SpriteBatch.DrawString(_titleFont, _menuTitle, titlePosition, titleColor, 0, origin, 1, SpriteEffects.None, 0);
 
-            Vector2 itemPosition = new Vector2(posx, Math.Max(GraphicsDevice.Viewport.Height / 3f, 90));
-            Vector2 itemSize = SceneManager.Font.MeasureString(_menuTitle);
-            itemPosition.Y -= itemSize.Y / 2f;
+            float posY = Math.Max(SceneManager.GraphicsDevice.Viewport.Height / 3f, 90);
             for (int i = 0; i < _menuItems.Count; i++)
             {
-                MenuItem item = _menuItems[i];
-                Color color = i == _selectedIndex ? Color.Black : Color.White;
-                itemPosition.X -= transitionOffset * (posx + SceneManager.Font.MeasureString(item.Text).X);
-                SceneManager.SpriteBatch.DrawString(SceneManager.Font, item.Text, itemPosition, color, 0, origin, 1, SpriteEffects.None, 0);
-                itemPosition.Y += itemSize.Y;
+                _menuItems[i].Draw(gameTime, IsActive && (i == _selectedIndex), this, transitionOffset, posY);
+                posY += _menuItems[i].GetItemHeight() + 15;
             }
+            
             SceneManager.SpriteBatch.End();
         }
 
