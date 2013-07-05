@@ -15,7 +15,6 @@ namespace ROTP.Scenes.Menus
             : base(manager, "Pause")
         {
             TransitionOnTime = TimeSpan.FromSeconds(1);
-            TransitionOffTime = TimeSpan.FromSeconds(1);
             IsPopup = true;
 
             this.
@@ -33,11 +32,13 @@ namespace ROTP.Scenes.Menus
 
         private void OnContinueSelected(object sender, EventArgs args)
         {
+            TransitionOffTime = TimeSpan.FromSeconds(1);
             Remove();
         }
 
         private void OnquitSelected(object sender, EventArgs args)
         {
+            TransitionOffTime = TimeSpan.FromSeconds(0);
             Remove();
             _parent.Remove();
         }
