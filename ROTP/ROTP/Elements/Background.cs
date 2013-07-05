@@ -73,7 +73,7 @@ namespace ROTP.Elements
         {
             _device.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-            DrawRoom();
+            //DrawRoom();
 
             viewMatrix = Matrix.CreateLookAt(GlobalsVar.cameraPosition, GlobalsVar.cameraLookAt, Vector3.Up);
             projectionMatrix = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, _device.Viewport.AspectRatio, 0.2f, 500.0f);
@@ -89,8 +89,10 @@ namespace ROTP.Elements
         private void SetUpCamera()
         {
             //Init
-            GlobalsVar.cameraPosition = new Vector3(20, 25, -30);
-            GlobalsVar.cameraLookAt = new Vector3(20, 0, 0);
+            //GlobalsVar.cameraPosition = new Vector3(20, 25, -30);
+            //GlobalsVar.cameraLookAt = new Vector3(20, 0, 0);
+            GlobalsVar.cameraPosition = new Vector3(0, 0, 40);
+            GlobalsVar.cameraLookAt = new Vector3(0, 20, 0);
 
         }
 
@@ -100,32 +102,32 @@ namespace ROTP.Elements
         private void UpdateCamera()
         {
             Vector3 dir = GlobalsVar.cameraLookAt - GlobalsVar.cameraPosition;
-            dir.Y = 0;
+            dir.Z = 0;
             dir.Normalize();
             dir /= 4; // Diminue la vitesse
 
             Vector3 dirN = dir;
-            dirN.X = dir.Z;
-            dirN.Z = -dir.X;
+            dirN.X = -dir.Y;
+            dirN.Y = dir.X;
 
             // Gauche - Droite
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
             {
-                if (GlobalsVar.cameraPosition.X + dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dirN.X > 1
+                /*if (GlobalsVar.cameraPosition.X + dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dirN.X > 1
                     && -(GlobalsVar.cameraPosition.Z + dirN.Z) < floorPlan.GetLength(1) -1 && -(GlobalsVar.cameraPosition.Z + dirN.Z) > 1)
-                {
+                {*/
                     GlobalsVar.cameraPosition += dirN;
                     GlobalsVar.cameraLookAt += dirN;
-                }
+                //}
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
             {
-                if (GlobalsVar.cameraPosition.X - dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dirN.X > 1
+                /*if (GlobalsVar.cameraPosition.X - dirN.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dirN.X > 1
                     && -(GlobalsVar.cameraPosition.Z - dirN.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z - dirN.Z) > 1)
-                {
+                {*/
                     GlobalsVar.cameraPosition -= dirN;
                     GlobalsVar.cameraLookAt -= dirN;
-                }
+                //}
             }
 
             // Travelling
@@ -149,21 +151,21 @@ namespace ROTP.Elements
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Up))
             {
-                if (GlobalsVar.cameraPosition.X + dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dir.X > 1
+                /*if (GlobalsVar.cameraPosition.X + dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X + dir.X > 1
                     && -(GlobalsVar.cameraPosition.Z + dir.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z + dir.Z) > 1)
-                {
+                {*/
                     GlobalsVar.cameraPosition += dir;
                     GlobalsVar.cameraLookAt += dir;
-                }
+                //}
             }
             if (Keyboard.GetState().IsKeyDown(Keys.Down))
             {
-                if (GlobalsVar.cameraPosition.X - dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dir.X > 1
+                /*if (GlobalsVar.cameraPosition.X - dir.X < floorPlan.GetLength(0) - 1 && GlobalsVar.cameraPosition.X - dir.X > 1
                     && -(GlobalsVar.cameraPosition.Z - dir.Z) < floorPlan.GetLength(1) - 1 && -(GlobalsVar.cameraPosition.Z - dir.Z) > 1)
-                {
+                {*/
                     GlobalsVar.cameraPosition -= dir;
                     GlobalsVar.cameraLookAt -= dir;
-                }
+                //}
             }
             
             // rotation autour d'un point
