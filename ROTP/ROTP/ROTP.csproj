@@ -117,7 +117,6 @@
     <Compile Include="Elements\Background.cs" />
     <Compile Include="Elements\Map.cs" />
     <Compile Include="Elements\MapCase.cs" />
-    <Compile Include="Input\Input.cs" />
     <Compile Include="Input\Common\Input.cs" />
     <Compile Include="Input\MenuInput.cs" />
     <Compile Include="Interface\GameInterface.cs" />
