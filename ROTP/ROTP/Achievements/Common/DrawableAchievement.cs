@@ -10,6 +10,12 @@ namespace ROTP.Achievements.Common
 {
     class DrawableAchievement
     {
+        public static int ImageSize
+        {
+            get { return 151; }
+        } 
+
+
         private String _title;
         private String _description;
         private String _imagePath;
@@ -53,7 +59,7 @@ namespace ROTP.Achievements.Common
 
         public void Draw(SceneManager sm, Vector2 position, bool isSelected)
         {
-            Rectangle imageRect = new Rectangle((int)position.X, (int)position.Y, 151, 151);
+            Rectangle imageRect = new Rectangle((int)position.X, (int)position.Y, ImageSize, ImageSize);
             _sceneManager.SpriteBatch.Draw(_image, imageRect, Color.White * (isSelected ? 1 : 0.5f));
         }
     }

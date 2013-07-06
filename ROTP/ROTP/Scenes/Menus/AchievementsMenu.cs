@@ -11,17 +11,18 @@ namespace ROTP.Scenes.Common
     class AchievementsMenu : Scene
     {
         private const string _title = "Succes";
+        private const float Scale = 0.8f;
+
         private int _indexX = 0;
         private int _indexY = 0;
 
-
+        private float _padding;
         private int _elementPerRow;
-        private int _margin;
+        private float _margin;
         private int _numberOfRow = 0;
         private List<List<DrawableAchievement>> achievements;
 
 
-        private const float Scale = 0.8f;
 
         private bool hasResetFocus = false;
         private float _resetFade;
@@ -38,9 +39,10 @@ namespace ROTP.Scenes.Common
 
         public override void  Initialize()
         {
-            //TODO calculate this depending of the screen's width
-            _elementPerRow = 3;
-            _margin = 20;
+            int screenWidth = SceneManager.GraphicsDevice.Viewport.Width;
+            _padding = screenWidth / 6f;
+            _elementPerRow = (int) ((screenWidth - 2 * _padding) / DrawableAchievement.ImageSize);
+            _margin = (((screenWidth - 2 * _padding) % DrawableAchievement.ImageSize) / (float) (_elementPerRow - 1));
 
             InitAchievements();
             base.Initialize();
@@ -173,10 +175,8 @@ namespace ROTP.Scenes.Common
         {
             SceneManager.SpriteBatch.Begin();
 
-
-            float posx = GraphicsDevice.Viewport.Width / 6f;
             var transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            var titlePosition = new Vector2(posx, 80);
+            var titlePosition = new Vector2(GraphicsDevice.Viewport.Width / 6f, 80);
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             titlePosition.X -= transitionOffset * 100;
             SceneManager.SpriteBatch.DrawString(Menu.TitleFont, "Succes", titlePosition, titleColor, 0, new Vector2(), 1, SpriteEffects.None, 0);
@@ -197,12 +197,12 @@ namespace ROTP.Scenes.Common
 			{
                 float offset = (float)Math.Pow(TransitionPosition, 2);
 
-                float posx = GraphicsDevice.Viewport.Width / 6f;
+                float posx = _padding;
 
                 for (int j = 0; j < achievements[i].Count; j++)
 			    {
                     isEndOfLine = false;
-                    posx -= offset * (posx + 151);
+                    posx -= offset * (posx + DrawableAchievement.ImageSize);
 			        achievements[i][j].Draw(SceneManager, new Vector2(posx, posy), !hasCancelFocus && !hasResetFocus && i == _indexX && j == _indexY);
                     posx += achievements[i][j].Image.Bounds.Width + _margin;
 
@@ -214,7 +214,7 @@ namespace ROTP.Scenes.Common
                 }
 			}
 
-            return posy + _margin + (isEndOfLine ? 0 : 151);
+            return posy + _margin + (isEndOfLine ? 0 : DrawableAchievement.ImageSize);
         }
 
         private void DrawDescription(float posy)
