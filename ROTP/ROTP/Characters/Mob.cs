@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using ROTP.Utils;
 
-namespace ROTP.Scenes.Characters
+namespace ROTP.Characters
 {
     class Mob
     {

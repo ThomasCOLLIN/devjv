@@ -4,7 +4,7 @@ using ROTP.Scenes.Common;
 using ROTP.Elements;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
-using ROTP.Scenes.Characters;
+using ROTP.Characters;
 using ROTP.Scenes.Menus;
 using ROTP.Utils;
 using System;
