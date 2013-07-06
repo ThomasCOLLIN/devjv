@@ -7,32 +7,19 @@ using ROTP.Save;
 
 namespace ROTP.Achievements
 {
-    class FiveVictoryAchievement : Achievement
+    [Serializable]
+    public class FiveVictoryAchievement : Achievement
     {
-        private int times;
-
-        public int Times
-        {
-            get { return times; }
-            set { times = value; }
-        }
-
         public FiveVictoryAchievement()
-            : base("Winner débutant",
-                   "Tu as gagné cinq partie",
-                   "")
+            : base("Winner debutant",
+                   "Tu as gagne cinq partie",
+                   "Menu/Achievements/victory_bronze", 5)
         {
-            SaveManager.OptionsChanged += onEvent;
         }
 
-        protected override void onEvent(object sender, EventArgs args)
+        protected override bool IsConditionOk()
         {
-            if (!IsOwned)
-            {
-                if (++times >= 5)
-                    IsOwned = true;
-                saveAchievement();
-            }
+            return false;
         }
     }
 }

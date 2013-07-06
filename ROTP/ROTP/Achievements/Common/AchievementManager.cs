@@ -46,7 +46,9 @@ namespace ROTP.Achievements.Common
             List<Achievement> achievements = new List<Achievement>();
 
             achievements.Add(new ChangeOptionsAchievement());
+            achievements.Add(new ChangeOptionsSometimesAchievement());
             achievements.Add(new ChangeOptionsALotAchievement());
+            achievements.Add(new FiveVictoryAchievement());
 
             return achievements;
         }

@@ -12,19 +12,15 @@ namespace ROTP.Achievements
     {
         public ChangeOptionsAchievement()
             : base("Changeur d'options",
-                   "Tu as changé la configuration du jeu!!!!",
-                   "")
+                   "Tu as change la configuration du jeu!!!!",
+                   "Menu/Achievements/options_bronze")
         {
             SaveManager.OptionsChanged += onEvent;
         }
 
-        protected override void onEvent(object sender, EventArgs args)
+        protected override bool IsConditionOk()
         {
-            if (!IsOwned)
-            {
-                IsOwned = true;
-                saveAchievement();
-            }
+            return true;
         }
     }
 }

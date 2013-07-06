@@ -75,6 +75,7 @@ namespace ROTP.Save
             try
             {
                 file = File.Open(path, FileMode.OpenOrCreate);
+                file.SetLength(0);
                 XmlSerializer serializer = new XmlSerializer(obj.GetType());
                 serializer.Serialize(file, obj);
                 file.Close();

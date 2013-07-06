@@ -28,6 +28,20 @@ namespace ROTP.Input
                 || IsButtonPressedOnce(Buttons.LeftThumbstickUp);
         }
 
+        public static bool IsLeftPressed()
+        {
+            return IsKeyPressedOnce(Keys.Left)
+                || IsButtonPressedOnce(Buttons.DPadLeft)
+                || IsButtonPressedOnce(Buttons.LeftThumbstickLeft);
+        }
+
+        public static bool IsRightPressed()
+        {
+            return IsKeyPressedOnce(Keys.Right)
+                || IsButtonPressedOnce(Buttons.DPadRight)
+                || IsButtonPressedOnce(Buttons.LeftThumbstickRight);
+        }
+
         public static bool IsSelectPressed()
         {
             return IsKeyPressedOnce(Keys.Enter)

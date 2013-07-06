@@ -10,13 +10,18 @@ namespace ROTP.Achievements.Common
 {
     [Serializable]
     [XmlInclude(typeof(ChangeOptionsAchievement))]
+    [XmlInclude(typeof(ChangeOptionsSometimesAchievement))]
     [XmlInclude(typeof(ChangeOptionsALotAchievement))]
+    [XmlInclude(typeof(FiveVictoryAchievement))]
     public abstract class Achievement
     {
         private bool isOwned = false;
         private string name = "";
         private string description = "";
         private string imagePath = "";
+
+        private int currentTimes = 0;
+        private int neededTimes;
 
         public string Name
         {
@@ -39,8 +44,15 @@ namespace ROTP.Achievements.Common
             set { isOwned = value; }
         }
 
-        public Achievement(string name, string description, string imagePath)
+        public int CurrentTimes
         {
+            get { return currentTimes; }
+            set { currentTimes = value; }
+        }
+
+        public Achievement(string name, string description, string imagePath, int neededTimes = 1)
+        {
+            this.neededTimes = neededTimes;
             this.name = name;
             this.description = description;
             this.imagePath = imagePath;
@@ -51,6 +63,20 @@ namespace ROTP.Achievements.Common
             SaveManager.SaveAchievements(AchievementManager.Instance.GetAll());
         }
 
-        protected abstract void onEvent(object sender, EventArgs args);
+        protected void onEvent(object sender, EventArgs args)
+        {
+            if (!isOwned)
+            {
+                if (IsConditionOk())
+                    currentTimes++;
+
+                if (currentTimes >= neededTimes)
+                    isOwned = true;
+
+                saveAchievement();
+            }
+        }
+
+        protected abstract bool IsConditionOk();
     }
 }

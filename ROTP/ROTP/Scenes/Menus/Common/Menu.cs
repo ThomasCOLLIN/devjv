@@ -85,8 +85,8 @@ namespace ROTP.Scenes.Menus.Common
 
             float posx = GraphicsDevice.Viewport.Width / 6f;
             SceneManager.SpriteBatch.Begin();
-            var transitionOffset = (float)Math.Pow(TransitionPosition, 2);
-            var titlePosition = new Vector2(posx, 80);
+            float transitionOffset = (float)Math.Pow(TransitionPosition, 2);
+            Vector2 titlePosition = new Vector2(posx, 80);
             Color titleColor = new Color(192, 192, 192) * TransitionAlpha;
             titlePosition.X -= transitionOffset * 100;
             SceneManager.SpriteBatch.DrawString(_titleFont, _menuTitle, titlePosition, titleColor, 0, origin, 1, SpriteEffects.None, 0);

@@ -35,6 +35,8 @@ namespace ROTP.Scenes.Menus.Common
                 : Math.Max(_selectionFade - fadeSpeed, 0);
         }
 
+
+        // crade : le menu devrait set lui meme la position general des items
         public void Draw(GameTime gametime, bool isSelected, Menu menu, float offset, float posY)
         {
             SceneManager sm = menu.SceneManager;
