@@ -19,7 +19,7 @@ namespace ROTP.Characters.Mobs
             model3D = GlobalsVar.MeshModels["mob1"];
             modelRotation = Matrix.CreateRotationX(MathHelper.Pi / 2);
             ratio = 0.05f;
-            modelVelocity = 0.01f;
+            modelVelocity = 0.03f;
             Life = 10;
 
             

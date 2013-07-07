@@ -21,9 +21,9 @@ namespace ROTP.Characters
         {
             ActionRange = 3;
             Type = "earth";
-            model3D = GlobalsVar.MeshModels["totem"];
+            model3D = GlobalsVar.MeshModels["earthTower"];
             modelRotation = Matrix.CreateRotationX(MathHelper.Pi / 2);
-            ratio = 0.04f;
+            ratio = 0.02f;
         }
     }
 }

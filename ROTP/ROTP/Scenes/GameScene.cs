@@ -44,6 +44,8 @@ namespace ROTP.Scenes
             GlobalsVar.MeshModels.Add("totem", SceneManager.Game.Content.Load<Model>(@"Models\totem-1"));
             GlobalsVar.MeshModels.Add("fireTower", SceneManager.Game.Content.Load<Model>(@"Models\fire_tower"));
             GlobalsVar.MeshModels.Add("waterTower", SceneManager.Game.Content.Load<Model>(@"Models\water_tower"));
+            GlobalsVar.MeshModels.Add("earthTower", SceneManager.Game.Content.Load<Model>(@"Models\earth_tower"));
+
 
             GlobalsVar.MeshModels.Add("mob1", SceneManager.Game.Content.Load<Model>(@"Models\mob-1"));
 
@@ -51,7 +53,7 @@ namespace ROTP.Scenes
 
             towers = new List<Tower>();
 
-            GlobalsVar.Mobs.Add(new TestMob(new Vector3(0, 2*5, 0)));
+            //GlobalsVar.Mobs.Add(new TestMob(new Vector3(0, 2*5, 0)));
         }
 
         protected override void UnloadContent()
