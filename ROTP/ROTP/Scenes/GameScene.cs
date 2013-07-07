@@ -10,6 +10,7 @@ using ROTP.Utils;
 using System;
 using System.Diagnostics;
 using ROTP.Characters.Towers;
+using ROTP.Characters.Mobs;
 
 namespace ROTP.Scenes
 {
@@ -26,7 +27,7 @@ namespace ROTP.Scenes
             : base(manager)
         {
             GlobalsVar.MeshModels = new Dictionary<string, Model>();
-            GlobalsVar.mobs = new List<Mob>();
+            GlobalsVar.Mobs = new List<Mob>();
         }
 
         protected override void LoadContent()
@@ -44,10 +45,13 @@ namespace ROTP.Scenes
             GlobalsVar.MeshModels.Add("fireTower", SceneManager.Game.Content.Load<Model>(@"Models\fire_tower"));
             GlobalsVar.MeshModels.Add("waterTower", SceneManager.Game.Content.Load<Model>(@"Models\water_tower"));
 
+            GlobalsVar.MeshModels.Add("mob1", SceneManager.Game.Content.Load<Model>(@"Models\mob-1"));
+
             GlobalsVar.Map.Generate(10, 10, "grass");
 
-
             towers = new List<Tower>();
+
+            GlobalsVar.Mobs.Add(new TestMob(new Vector3(0, 2*5, 0)));
         }
 
         protected override void UnloadContent()
@@ -66,15 +70,12 @@ namespace ROTP.Scenes
             {
                 gameBackground.Update();
                 GlobalsVar.Map.Update(gameTime);
-                foreach (Mob mob in GlobalsVar.mobs)
+                foreach (Mob mob in GlobalsVar.Mobs)
                 {
                     mob.Update(gameTime);
                 }
-               // CheckMouse();
                 gameInterface.Update();
             }
-
-
         }
 
         public Vector2? CheckMouse()
@@ -150,9 +151,9 @@ namespace ROTP.Scenes
 
             //Console.WriteLine("map is " + GlobalsVar.Map.MapArray.Count + " " + GlobalsVar.Map.MapArray[GlobalsVar.Map.MapArray.Count - 1].Count);
             GlobalsVar.Map.Draw();
-            foreach (Mob mob in GlobalsVar.mobs)
+            foreach (Mob mob in GlobalsVar.Mobs)
             {
-                mob.Draw();
+                mob.Draw(gameTime);
             }
 
             towers.Sort(Comparers.TowerCompareY);

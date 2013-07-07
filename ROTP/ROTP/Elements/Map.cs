@@ -9,7 +9,7 @@ using ROTP.Characters;
 
 namespace ROTP.Elements
 {
-    class Map
+    public class Map
     {
         List<List<MapCase>> mapArray;
 
