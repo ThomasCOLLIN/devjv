@@ -152,6 +152,7 @@
     <Compile Include="Utils\Camera.cs" />
     <Compile Include="Utils\Comparer.cs" />
     <Compile Include="Utils\GlobalsVar.cs" />
+    <Compile Include="Utils\TestCollisions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

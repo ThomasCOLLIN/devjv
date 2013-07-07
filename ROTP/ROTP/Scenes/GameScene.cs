@@ -66,6 +66,11 @@ namespace ROTP.Scenes
             base.Update(gameTime, otherSceneHasFocus, coveredByOtherScene);
             GlobalsVar.Camera.Update();
 
+            foreach (Tower tower in towers)
+            {
+                tower.Update(gameTime);
+            }
+
             if (IsActive)
             {
                 gameBackground.Update();

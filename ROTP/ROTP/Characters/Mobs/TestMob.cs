@@ -20,6 +20,9 @@ namespace ROTP.Characters.Mobs
             modelRotation = Matrix.CreateRotationX(MathHelper.Pi / 2);
             ratio = 0.05f;
             modelVelocity = 0.01f;
+            Life = 10;
+
+            
         }
     }
 }

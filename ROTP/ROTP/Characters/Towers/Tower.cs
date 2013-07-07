@@ -16,15 +16,21 @@ namespace ROTP.Characters
         public float ActionRange { get; set; }
         public Vector3 ModelPosition { get; set; }
         public String Type { get; set; }
+        
         protected Model model3D;
-
         protected Matrix modelRotation;
         protected float ratio;
+        protected float reach;
+        protected TimeSpan speedAttack;
+        protected TimeSpan timeLastShot;
 
         public Tower(Vector3 position)
         {
             ModelPosition = position;
             modelRotation = Matrix.Identity;
+            reach = 7.5f;
+            speedAttack = new TimeSpan(0, 0, 1);
+            timeLastShot = new TimeSpan(0, 0, 1);
         }
 
         public void Draw(GameTime gameTime)
@@ -59,7 +65,30 @@ namespace ROTP.Characters
 
         public void Update(GameTime gameTime)
         {
+            timeLastShot = timeLastShot.Add(gameTime.ElapsedGameTime);
 
+            if (speedAttack <= timeLastShot && GlobalsVar.Mobs.Any())
+            {
+                Console.WriteLine("try to attack");
+                // if the tower has attacked this time, the timer is reset.
+                if (Attack(GlobalsVar.Mobs))
+                    timeLastShot = new TimeSpan(0, 0, 0);
+            }
+        }
+
+        public Boolean Attack(List<Mob> mobs)
+        {
+            foreach (Mob mob in mobs)
+            {
+                Boolean isCollide = TestCollisions.Intersects(new Vector2(ModelPosition.X, ModelPosition.Y), reach,
+                    new Vector2(mob.ModelPosition.X, mob.ModelPosition.Y), new Vector2(5, 5));
+                if (isCollide)
+                {
+                    mob.LostLife();
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void HandleInput()

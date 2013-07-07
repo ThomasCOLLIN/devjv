@@ -12,16 +12,20 @@ namespace ROTP.Characters
     {
         public Vector3 ModelPosition { get; set; }
         public String Type { get; set; }
+        public Int32 Life { get; set; }
+        //public Re MyProperty { get; set; }
+        
         protected Model model3D;
         protected float modelVelocity;
-
         protected Matrix modelRotation;
         protected float ratio;
+        protected Int32 damages;
 
         public Mob(Vector3 position)
         {
             ModelPosition = position;
             modelRotation = Matrix.Identity;
+            damages = 1;
         }
 
         public void Update(GameTime gameTime)
@@ -43,6 +47,17 @@ namespace ROTP.Characters
                 modelRotation = Matrix.CreateRotationY(2 * MathHelper.Pi);
             }
             modelPosition = new Vector3(modelPosition.X + x, modelPosition.Y, modelPosition.Z - z);*/
+        }
+
+        public void LostLife()
+        {
+            Life -= damages;
+            Console.WriteLine("-" + damages + ". Life is now: " + Life);
+            if (Life <= 0)
+            {
+                GlobalsVar.Mobs.Remove(this);
+                Console.WriteLine("Arrg!");
+            }
         }
 
         public void Draw(GameTime gameTime)
