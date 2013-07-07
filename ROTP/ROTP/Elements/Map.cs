@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using ROTP.Utils;
 using Microsoft.Xna.Framework;
+using ROTP.Characters;
 
 namespace ROTP.Elements
 {
@@ -30,6 +31,9 @@ namespace ROTP.Elements
                 mapArray.Add(new List<MapCase>());
                 for (int j = 0; j < y; j++)
                 {
+                    if (i == 0 && j == 0)
+                        continue;
+
                     MapCase newCase = null;
                     switch (type)
                     {

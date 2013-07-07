@@ -18,6 +18,9 @@ namespace ROTP.Scenes
         GameInterface gameInterface;
         MapCase testCase;
 
+        List<Tower> towers;
+
+
         public GameScene(SceneManager manager)
             : base(manager)
         {
@@ -32,12 +35,17 @@ namespace ROTP.Scenes
             gameBackground.LoadContent(SceneManager.Game.Content);
             gameInterface = new GameInterface(SceneManager.GraphicsDevice);
             gameInterface.Load(SceneManager.Game.Content);
-            
+
             GlobalsVar.Map = new Map();
-            GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>("Models\\p1_wedge"));
-            GlobalsVar.MeshModels.Add("grassGround", SceneManager.Game.Content.Load<Model>("Models\\GrassSquare"));
+            GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>(@"Models\p1_wedge"));
+            GlobalsVar.MeshModels.Add("grassGround", SceneManager.Game.Content.Load<Model>(@"Models\GrassSquare"));
+            GlobalsVar.MeshModels.Add("totem", SceneManager.Game.Content.Load<Model>(@"Models\totem-1"));
 
             GlobalsVar.Map.Generate(10, 10, "grass");
+
+
+            towers = new List<Tower>();
+            towers.Add(new EarthTower(new Vector3(0, 0, 0)));
         }
 
         protected override void UnloadContent()
@@ -60,14 +68,14 @@ namespace ROTP.Scenes
                 {
                     mob.Update(gameTime);
                 }
-                CheckMouse();
+               // CheckMouse();
                 gameInterface.Update();
             }
 
 
         }
 
-        public void CheckMouse()
+        public Vector2? CheckMouse()
         {
             MouseState mouseState = Mouse.GetState();
 
@@ -82,10 +90,10 @@ namespace ROTP.Scenes
 
                 Vector3 nearsource = new Vector3((float)mouseX, (float)mouseY, 0f);
                 Vector3 farsource = new Vector3((float)mouseX, (float)mouseY, 1f);
-                
+
                 Matrix world = Matrix.CreateTranslation(0, 0, 0);
                 //Matrix world = Matrix.Identity;
-                
+
                 Vector3 nearPoint = SceneManager.GraphicsDevice.Viewport.Unproject(nearsource, GlobalsVar.Camera.ProjectionMatrix, GlobalsVar.Camera.ViewMatrix, world);
                 Vector3 farPoint = SceneManager.GraphicsDevice.Viewport.Unproject(farsource, GlobalsVar.Camera.ProjectionMatrix, GlobalsVar.Camera.ViewMatrix, world);
 
@@ -120,13 +128,16 @@ namespace ROTP.Scenes
                             }
 
                             if (res != null)
-                                Console.WriteLine("You cliked on item that is in coordinates : " + res.ModelPosition.X / 5 + " " + res.ModelPosition.Y / 5);
+                            {
+                               Console.WriteLine("You cliked on item that is in coordinates : " + res.ModelPosition.X / 5 + " " + res.ModelPosition.Y / 5);
+                               return new Vector2(res.ModelPosition.X / 5, res.ModelPosition.Y / 5);
+                            }
                         }
                     }
                 }
             }
 
-
+            return null;
         }
 
         public override void Draw(GameTime gameTime)
@@ -141,6 +152,14 @@ namespace ROTP.Scenes
             {
                 mob.Draw();
             }
+
+            foreach (Tower tower in towers)
+            {
+                tower.Draw(gameTime);
+            }
+
+
+            // Draw the Interface. Must be the last thing to draw in the scene. (Except menu).
             gameInterface.Draw(SceneManager.SpriteBatch);
 
             if (TransitionPosition > 0)
@@ -159,6 +178,12 @@ namespace ROTP.Scenes
             {
                 new MenuPause(SceneManager, this).Add();
                 return;
+            }
+
+            Vector2? clickObject = CheckMouse();
+            if (clickObject != null)
+            {
+                towers.Add(new EarthTower(new Vector3(clickObject.Value.X * 5, clickObject.Value.Y * 5, 0)));
             }
 
             gameBackground.HandleInput();
