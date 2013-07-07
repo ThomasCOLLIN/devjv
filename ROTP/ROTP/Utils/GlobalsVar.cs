@@ -15,5 +15,6 @@ namespace ROTP.Utils
         public static Map Map { get; set; }
         public static List<Mob> Mobs { get; set; }
         internal static Camera Camera { get; set; }
+        public static Int32 PlayerLife { get; set; }
     }
 }

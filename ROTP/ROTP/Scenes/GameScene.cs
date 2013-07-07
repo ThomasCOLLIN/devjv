@@ -21,7 +21,10 @@ namespace ROTP.Scenes
         MapCase testCase;
 
         List<Tower> towers;
+        Target target;
 
+        TimeSpan popMobTimer;
+        TimeSpan lastPopMobTimer;
 
         public GameScene(SceneManager manager)
             : base(manager)
@@ -38,6 +41,11 @@ namespace ROTP.Scenes
             gameInterface = new GameInterface(SceneManager.GraphicsDevice);
             gameInterface.Load(SceneManager.Game.Content);
 
+            popMobTimer = new TimeSpan(0, 0, 3);
+            lastPopMobTimer = new TimeSpan(popMobTimer.Hours, popMobTimer.Minutes, popMobTimer.Seconds);
+
+            GlobalsVar.PlayerLife = 1;
+
             GlobalsVar.Map = new Map();
             GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>(@"Models\p1_wedge"));
             GlobalsVar.MeshModels.Add("grassGround", SceneManager.Game.Content.Load<Model>(@"Models\GrassSquare"));
@@ -45,6 +53,8 @@ namespace ROTP.Scenes
             GlobalsVar.MeshModels.Add("fireTower", SceneManager.Game.Content.Load<Model>(@"Models\fire_tower"));
             GlobalsVar.MeshModels.Add("waterTower", SceneManager.Game.Content.Load<Model>(@"Models\water_tower"));
             GlobalsVar.MeshModels.Add("earthTower", SceneManager.Game.Content.Load<Model>(@"Models\earth_tower"));
+            GlobalsVar.MeshModels.Add("ponyStark", SceneManager.Game.Content.Load<Model>(@"Models\pony_stark"));
+            GlobalsVar.MeshModels.Add("hq", SceneManager.Game.Content.Load<Model>(@"Models\qg"));
 
 
             GlobalsVar.MeshModels.Add("mob1", SceneManager.Game.Content.Load<Model>(@"Models\mob-1"));
@@ -52,8 +62,9 @@ namespace ROTP.Scenes
             GlobalsVar.Map.Generate(10, 10, "grass");
 
             towers = new List<Tower>();
+            target = new Target(new Vector3(8 * 4, 2 * 4, 0));
 
-            //GlobalsVar.Mobs.Add(new TestMob(new Vector3(0, 2*5, 0)));
+            //GlobalsVar.Mobs.Add(new PonyStarkMob(new Vector3(0, 2*5, 0)));
         }
 
         protected override void UnloadContent()
@@ -73,6 +84,8 @@ namespace ROTP.Scenes
                 tower.Update(gameTime);
             }
 
+            target.Update(gameTime);
+
             if (IsActive)
             {
                 gameBackground.Update();
@@ -83,6 +96,16 @@ namespace ROTP.Scenes
                 }
                 gameInterface.Update();
             }
+
+            lastPopMobTimer = lastPopMobTimer.Add(gameTime.ElapsedGameTime);
+
+            if (popMobTimer <= lastPopMobTimer)
+            {
+                GlobalsVar.Mobs.Add(new PonyStarkMob(new Vector3(0, 2*5, 0)));
+                lastPopMobTimer = new TimeSpan(0, 0, 0);
+            }
+
+            
         }
 
         public Vector2? CheckMouse()
@@ -163,7 +186,8 @@ namespace ROTP.Scenes
                 mob.Draw(gameTime);
             }
 
-            towers.Sort(Comparers.TowerCompareY);
+            target.Draw(gameTime);
+
             foreach (Tower tower in towers)
             {   
                 tower.Draw(gameTime);
@@ -191,10 +215,17 @@ namespace ROTP.Scenes
                 return;
             }
 
+            if (GlobalsVar.PlayerLife <= 0)
+            {
+                new MenuGameOver(SceneManager, this).Add();
+                return;
+            }
+
             Vector2? clickObject = CheckMouse();
             if (clickObject != null)
             {
                 towers.Add(TowerFactory.GenerateTower(gameInterface.TowerSelectedType, new Vector3(clickObject.Value.X * 5, clickObject.Value.Y * 5, 0)));
+                towers.Sort(Comparers.TowerCompareY);
             }
 
             gameBackground.HandleInput();

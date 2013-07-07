@@ -8,61 +8,40 @@ using ROTP.Utils;
 
 namespace ROTP.Characters
 {
-    public abstract class Mob
+    public class Target
     {
         public Vector3 ModelPosition { get; set; }
-        public String Type { get; set; }
-        public Int32 Life { get; set; }
-        //public Re MyProperty { get; set; }
         
         protected Model model3D;
-        protected float modelVelocity;
         protected Matrix modelRotation;
         protected float ratio;
-        protected Int32 damages;
+        protected float reach;
 
-        public Mob(Vector3 position)
+        public Target(Vector3 position)
         {
             ModelPosition = position;
             modelRotation = Matrix.Identity;
-            damages = 1;
+
+            model3D = GlobalsVar.MeshModels["hq"];
+            modelRotation = Matrix.CreateRotationX(MathHelper.Pi / 2);
+            ratio = 0.08f;
+            reach = 5f;
         }
 
         public void Update(GameTime gameTime)
         {
-            ModelPosition = new Vector3(ModelPosition.X + modelVelocity, ModelPosition.Y, ModelPosition.Z);
-
-            /*float time = gameTime.ElapsedGameTime.Milliseconds;
-            float x = 0;
-            float z = 0;
-            if (modelPosition.X < 50)
+            for (int i = 0; i < GlobalsVar.Mobs.Count; i++)
             {
-                x = 2 * time / 100;
-                z = 0;
+                Mob mob = GlobalsVar.Mobs.ElementAt(i);
+                Boolean isCollide = TestCollisions.Intersects(new Vector2(ModelPosition.X, ModelPosition.Y), reach,
+                        new Vector2(mob.ModelPosition.X, mob.ModelPosition.Y), new Vector2(5, 5));
+                if (isCollide)
+                {
+                    mob.Kill();
+                    GlobalsVar.PlayerLife -= 1;
+                    Console.WriteLine("The player have now: " + GlobalsVar.PlayerLife);
+                }
             }
-            else
-            {
-                x = 0;
-                z = 2 * time / 100;
-                modelRotation = Matrix.CreateRotationY(2 * MathHelper.Pi);
-            }
-            modelPosition = new Vector3(modelPosition.X + x, modelPosition.Y, modelPosition.Z - z);*/
-        }
-
-        public void LostLife()
-        {
-            Life -= damages;
-            Console.WriteLine("-" + damages + ". Life is now: " + Life);
-            if (Life <= 0)
-            {
-                Kill();
-                Console.WriteLine("Arrg!");
-            }
-        }
-
-        public void Kill()
-        {
-            GlobalsVar.Mobs.Remove(this);
         }
 
         public void Draw(GameTime gameTime)

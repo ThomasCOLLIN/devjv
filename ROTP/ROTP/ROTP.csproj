@@ -114,7 +114,8 @@
     <Compile Include="Achievements\ChangeOptionsSometimesAchievement.cs" />
     <Compile Include="Achievements\Common\DrawableAchievement.cs" />
     <Compile Include="Achievements\FiveVictoryAchievement.cs" />
-    <Compile Include="Characters\Mobs\TestMob.cs" />
+    <Compile Include="Characters\Target.cs" />
+    <Compile Include="Characters\Mobs\PonyStarkMob.cs" />
     <Compile Include="Characters\Towers\EarthTower.cs" />
     <Compile Include="Characters\Towers\FireTower.cs" />
     <Compile Include="Characters\Towers\Tower.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Scenes\GameScene.cs" />
+    <Compile Include="Scenes\Menus\MenuGameOver.cs" />
     <Compile Include="Scenes\Menus\MenuPause.cs" />
     <Compile Include="Scenes\Menus\OptionsMenu.cs" />
     <Compile Include="Characters\Mobs\Mob.cs" />
