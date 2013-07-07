@@ -24,7 +24,7 @@ namespace ROTP.Characters
         public Tower(Vector3 position)
         {
             ModelPosition = position;
-            modelRotation = Matrix.CreateRotationX(MathHelper.Pi / 2);
+            modelRotation = Matrix.Identity;
         }
 
         public void Draw(GameTime gameTime)

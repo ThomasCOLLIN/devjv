@@ -9,6 +9,7 @@ using ROTP.Scenes.Menus;
 using ROTP.Utils;
 using System;
 using System.Diagnostics;
+using ROTP.Characters.Towers;
 
 namespace ROTP.Scenes
 {
@@ -40,12 +41,13 @@ namespace ROTP.Scenes
             GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>(@"Models\p1_wedge"));
             GlobalsVar.MeshModels.Add("grassGround", SceneManager.Game.Content.Load<Model>(@"Models\GrassSquare"));
             GlobalsVar.MeshModels.Add("totem", SceneManager.Game.Content.Load<Model>(@"Models\totem-1"));
+            GlobalsVar.MeshModels.Add("fireTower", SceneManager.Game.Content.Load<Model>(@"Models\fire_tower"));
+            GlobalsVar.MeshModels.Add("waterTower", SceneManager.Game.Content.Load<Model>(@"Models\water_tower"));
 
             GlobalsVar.Map.Generate(10, 10, "grass");
 
 
             towers = new List<Tower>();
-            towers.Add(new EarthTower(new Vector3(0, 0, 0)));
         }
 
         protected override void UnloadContent()
@@ -153,8 +155,9 @@ namespace ROTP.Scenes
                 mob.Draw();
             }
 
+            towers.Sort(Comparers.TowerCompareY);
             foreach (Tower tower in towers)
-            {
+            {   
                 tower.Draw(gameTime);
             }
 
@@ -183,7 +186,7 @@ namespace ROTP.Scenes
             Vector2? clickObject = CheckMouse();
             if (clickObject != null)
             {
-                towers.Add(new EarthTower(new Vector3(clickObject.Value.X * 5, clickObject.Value.Y * 5, 0)));
+                towers.Add(TowerFactory.GenerateTower(gameInterface.TowerSelectedType, new Vector3(clickObject.Value.X * 5, clickObject.Value.Y * 5, 0)));
             }
 
             gameBackground.HandleInput();

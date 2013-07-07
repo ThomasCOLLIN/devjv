@@ -26,6 +26,8 @@ namespace ROTP
         private Vector2 _lifeButtonPosition = new Vector2(160, 650);
         private Rectangle _lifeButtonBoundsRect;
 
+        public String TowerSelectedType { get; set; }
+        
 
         public GameInterface(GraphicsDevice device)
         {
@@ -37,19 +39,19 @@ namespace ROTP
 
             _towerIcons = new List<TowerIcon>();
            
-            TowerIcon towerIcon = new TowerIcon(new Vector2(10, 650), @"Textures\button-eiffel-tower");
-            towerIcon.Text = "Toto\nThis is Sparta !";
-            _towerIcons.Add(towerIcon);
+            TowerIcon towerIconFire = new TowerIcon(new Vector2(10, 650), @"Textures\button-eiffel-tower", "fire");
+            towerIconFire.Text = "Creer des tours de feu.";
+            _towerIcons.Add(towerIconFire);
 
+            TowerIcon towerIconEarth = new TowerIcon(new Vector2(60, 650), @"Textures\button-eiffel-tower", "earth");
+            towerIconEarth.Text = "Creer des tours de terre.";
+            _towerIcons.Add(towerIconEarth);
 
-            towerIcon = new TowerIcon(new Vector2(60, 650), @"Textures\button-eiffel-tower");
-            towerIcon.Text = "Titi";
-            _towerIcons.Add(towerIcon);
+            TowerIcon towerIconWater = new TowerIcon(new Vector2(110, 650), @"Textures\button-eiffel-tower", "water");
+            towerIconWater.Text = "Creer des tours d'eau.";
+            _towerIcons.Add(towerIconWater);
 
-            towerIcon = new TowerIcon(new Vector2(110, 650), @"Textures\button-eiffel-tower");
-            towerIcon.Text = "Tata";
-            _towerIcons.Add(towerIcon);
-
+            TowerSelectedType = "fire";
 
             _towerInformationBox = new TowerInformationsBox();
         }
@@ -86,6 +88,7 @@ namespace ROTP
                 {
                     _towerInformationBox.Display();
                     _towerInformationBox.Text = towerIcon.Text;
+                    TowerSelectedType = towerIcon.Type;
                     break;
                 }
             }

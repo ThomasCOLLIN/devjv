@@ -114,8 +114,11 @@
     <Compile Include="Achievements\ChangeOptionsSometimesAchievement.cs" />
     <Compile Include="Achievements\Common\DrawableAchievement.cs" />
     <Compile Include="Achievements\FiveVictoryAchievement.cs" />
-    <Compile Include="Characters\EarthTower.cs" />
-    <Compile Include="Characters\Tower.cs" />
+    <Compile Include="Characters\Towers\EarthTower.cs" />
+    <Compile Include="Characters\Towers\FireTower.cs" />
+    <Compile Include="Characters\Towers\Tower.cs" />
+    <Compile Include="Characters\Towers\TowerFactory.cs" />
+    <Compile Include="Characters\Towers\WaterTower.cs" />
     <Compile Include="Elements\Background.cs" />
     <Compile Include="Elements\Map.cs" />
     <Compile Include="Elements\MapCase.cs" />
@@ -146,6 +149,7 @@
     <Compile Include="Characters\Mob.cs" />
     <Compile Include="Scenes\TestScene.cs" />
     <Compile Include="Utils\Camera.cs" />
+    <Compile Include="Utils\Comparer.cs" />
     <Compile Include="Utils\GlobalsVar.cs" />
   </ItemGroup>
   <ItemGroup>

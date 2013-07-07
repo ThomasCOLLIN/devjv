@@ -16,14 +16,15 @@ namespace ROTP.Interface
         private Int32 _sizeIcon;
         private String _textureName;
         public String Text { get; set; }
+        public String Type { get; set; }
 
-        public TowerIcon(Vector2 position, String textureName)
+        public TowerIcon(Vector2 position, String textureName, String type)
         {
             _position = position;
             _textureName = textureName;
             _sizeIcon = 45;
             _towerIconBoundsRect = new Rectangle((Int32)_position.X, (Int32)_position.Y, _sizeIcon, _sizeIcon);
-
+            Type = type;
         }
 
         public void Load(ContentManager content)
