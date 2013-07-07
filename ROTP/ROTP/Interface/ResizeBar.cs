@@ -45,7 +45,7 @@ namespace ROTP.Interface
 
         public void ChangeLife(Int32 lifePoints)
         {
-            _life += lifePoints;
+            _life = lifePoints * 10;
             if (_life > _maxLife)
             {
                 _life = _maxLife;

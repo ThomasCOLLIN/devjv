@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using ROTP.Interface;
+using ROTP.Utils;
 
 namespace ROTP
 {
@@ -22,7 +23,7 @@ namespace ROTP
         private List<TowerIcon> _towerIcons;
         private TowerInformationsBox _towerInformationBox;
 
-        private Texture2D _tempLifeButton;
+        //private Texture2D _tempLifeButton;
         private Vector2 _lifeButtonPosition = new Vector2(160, 650);
         private Rectangle _lifeButtonBoundsRect;
 
@@ -39,15 +40,15 @@ namespace ROTP
 
             _towerIcons = new List<TowerIcon>();
            
-            TowerIcon towerIconFire = new TowerIcon(new Vector2(10, 650), @"Textures\button-eiffel-tower", "fire");
+            TowerIcon towerIconFire = new TowerIcon(new Vector2(10, 650), @"Textures\button-fire-tower", "fire");
             towerIconFire.Text = "Creer des tours de feu.";
             _towerIcons.Add(towerIconFire);
 
-            TowerIcon towerIconEarth = new TowerIcon(new Vector2(60, 650), @"Textures\button-eiffel-tower", "earth");
+            TowerIcon towerIconEarth = new TowerIcon(new Vector2(60, 650), @"Textures\button-earth-tower", "earth");
             towerIconEarth.Text = "Creer des tours de terre.";
             _towerIcons.Add(towerIconEarth);
 
-            TowerIcon towerIconWater = new TowerIcon(new Vector2(110, 650), @"Textures\button-eiffel-tower", "water");
+            TowerIcon towerIconWater = new TowerIcon(new Vector2(110, 650), @"Textures\button-water-tower", "water");
             towerIconWater.Text = "Creer des tours d'eau.";
             _towerIcons.Add(towerIconWater);
 
@@ -69,7 +70,7 @@ namespace ROTP
 
             _towerInformationBox.Load(content, new Vector2(700, 650));
 
-            _tempLifeButton = content.Load<Texture2D>(@"Textures\button-eiffel-tower");
+           //_tempLifeButton = content.Load<Texture2D>(@"Textures\button-eiffel-tower");
             _lifeButtonBoundsRect = new Rectangle((Int32)_lifeButtonPosition.X, (Int32)_lifeButtonPosition.Y, 45, 45);
 
         }
@@ -93,12 +94,14 @@ namespace ROTP
                 }
             }
 
+            _lifeBar.ChangeLife(GlobalsVar.PlayerLife);
+
             if (ToolsInterface.isMouseLeftPressed())
             {
                 if (ToolsInterface.isMouseIntersects(_lifeButtonPosition, _lifeButtonBoundsRect))
                 {
                     _lifeBar.ChangeLife(-1);
-                    _waveBar.ChangeLife(1);
+                    //_waveBar.ChangeLife(1);
                 }
             }
         }
@@ -123,7 +126,7 @@ namespace ROTP
 
             Rectangle displayRect = new Rectangle((Int32)_lifeButtonPosition.X, (Int32)_lifeButtonPosition.Y, 45, 45);
             spriteBatch.Begin();
-            spriteBatch.Draw(_tempLifeButton, displayRect, Color.White);
+            //spriteBatch.Draw(_tempLifeButton, displayRect, Color.White);
             spriteBatch.End();
         }
 

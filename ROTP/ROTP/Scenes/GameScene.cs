@@ -44,7 +44,7 @@ namespace ROTP.Scenes
             popMobTimer = new TimeSpan(0, 0, 3);
             lastPopMobTimer = new TimeSpan(popMobTimer.Hours, popMobTimer.Minutes, popMobTimer.Seconds);
 
-            GlobalsVar.PlayerLife = 1;
+            GlobalsVar.PlayerLife = 10;
 
             GlobalsVar.Map = new Map();
             GlobalsVar.MeshModels.Add("testchar", SceneManager.Game.Content.Load<Model>(@"Models\p1_wedge"));

@@ -29,7 +29,7 @@ namespace ROTP.Characters
             ModelPosition = position;
             modelRotation = Matrix.Identity;
             reach = 7.5f;
-            speedAttack = new TimeSpan(0, 0, 10);
+            speedAttack = new TimeSpan(0, 0, 2);
             timeLastShot = new TimeSpan(speedAttack.Hours, speedAttack.Minutes, speedAttack.Seconds);
         }
 
